@@ -11,21 +11,34 @@ class Monome {
 public:
 	Monome(double c = 1, int d = 0) : coeff(c), degr_int(d) {}
 
-	Monome& operator+(const Monome& other);
-	Monome& operator-(const Monome& other);
-	Monome& operator*(const Monome& other);
-	Monome& operator/(const Monome& other);
-	
+	// class is triviable copyable, do we really need cope and move constructors?
+	// класс тривиально копируемый, реально надо конструктор копирования и присваивания?
+
+	Monome& operator+(const Monome& other) const;
+	Monome& operator-(const Monome& other) const;
+	Monome& operator*(const Monome& other) const;
+	Monome& operator/(const Monome& other) const;
+	Monome& operator*(double c) const;
+	Monome& operator/(double c) const;
 
 	Monome& operator+=(const Monome& other);
 	Monome& operator-=(const Monome& other);
 	Monome& operator*=(const Monome& other);
 	Monome& operator/=(const Monome& other);
+	Monome& operator*=(double c);
+	Monome& operator/=(double c);
 
+	Monome& operator-() const;
 
+	int is_similar_to(const Monome& other) const;
+	int operator==(const Monome& other) const;
+	int operator!=(const Monome& other) const;
 
 	inline void set_coefficient(double c) { this->coeff = c; }
-	inline void set_deg(variables var, char d) { char* deg = (char*)&this->degr_int; deg[var] = d; }
+	inline void set_degree(variables var, char d) { char* deg = (char*)&this->degr_int; deg[var] = d; }
+
+	double value_in_point(double x, double y, double z) const;
 
 	friend ostream& operator<<(ostream& ostr, const Monome& to_out);
+	friend istream& operator>>(istream& istr, Monome& to_in);
 };
