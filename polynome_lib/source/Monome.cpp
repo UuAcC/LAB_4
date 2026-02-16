@@ -1,22 +1,23 @@
 #include "Monome.h"
+#include <cmath>
 
 // ----------------< regular operators >-----------------------------------------------------------
 
-Monome& Monome::operator+(const Monome& other) const {
+Monome Monome::operator+(const Monome& other) const {
 	if (this->degr_int != other.degr_int) throw - 1;
 	double sum = this->coeff + other.coeff;
 	if (sum < 0 && this->coeff > 0 && other.coeff > 0) { sum = std::numeric_limits<double>::max(); }
 	if (sum > 0 && this->coeff < 0 && other.coeff < 0) { sum = std::numeric_limits<double>::min(); }
 	return Monome(sum, this->degr_int);
 }
-Monome& Monome::operator-(const Monome& other) const {
+Monome Monome::operator-(const Monome& other) const {
 	if (this->degr_int != other.degr_int) throw - 1;
 	double dif = this->coeff - other.coeff;
 	if (dif < 0 && this->coeff > 0 && other.coeff < 0) { dif = std::numeric_limits<double>::max(); }
 	if (dif > 0 && this->coeff < 0 && other.coeff > 0) { dif = std::numeric_limits<double>::min(); }
 	return Monome(dif, this->degr_int);
 }
-Monome& Monome::operator*(const Monome& other) const {
+Monome Monome::operator*(const Monome& other) const {
 	double mul = this->coeff * other.coeff;
 	if (mul < 0 && ((this->coeff > 0 && other.coeff > 0) || (this->coeff < 0 && other.coeff < 0))) {
 		mul = std::numeric_limits<double>::max(); 
@@ -36,7 +37,7 @@ Monome& Monome::operator*(const Monome& other) const {
 	}
 	return res;
 }
-Monome& Monome::operator/(const Monome& other) const {
+Monome Monome::operator/(const Monome& other) const {
 	double div = this->coeff / other.coeff;
 	if (div < 0 && ((this->coeff > 0 && other.coeff > 0) || (this->coeff < 0 && other.coeff < 0))) {
 		div = std::numeric_limits<double>::max();
@@ -56,7 +57,7 @@ Monome& Monome::operator/(const Monome& other) const {
 	}
 	return res;
 }
-Monome& Monome::operator*(double c) const {
+Monome Monome::operator*(double c) const {
 	double mul = this->coeff * c;
 	if (mul < 0 && ((this->coeff > 0 && c > 0) || (this->coeff < 0 && c < 0))) {
 		mul = std::numeric_limits<double>::max();
@@ -66,7 +67,7 @@ Monome& Monome::operator*(double c) const {
 	}
 	return Monome(mul, this->degr_int);
 }
-Monome& Monome::operator/(double c) const {
+Monome Monome::operator/(double c) const {
 	double div = this->coeff / c;
 	if (div < 0 && ((this->coeff > 0 && c > 0) || (this->coeff < 0 && c < 0))) {
 		div = std::numeric_limits<double>::max();
@@ -164,8 +165,8 @@ Monome& Monome::operator/=(double c){
 
 // ----------------< Unary operator- >-------------------------------------------------------------
 
-Monome& Monome::operator-() const {
-	return Monome(this->coeff * (-1), this->degr_int);
+Monome Monome::operator-() const {
+	return Monome(-this->coeff, this->degr_int);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -186,10 +187,17 @@ int Monome::operator!=(const Monome& other) const {
 
 // ------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------
+// --------< Calculating value in point >----------------------------------------------------------
+
+int sign(double x) { return (x > 0) ? 1 : ((x < 0) ? -1 : 0); }
 
 double Monome::value_in_point(double x, double y, double z) const {
-	
+	char* degrees = (char*)(&this->degr_int);
+	double res = this->coeff * pow(x, degrees[0]) * pow(y, degrees[1]) * pow(z, degrees[2]);
+	double _sign = sign(this->coeff) * sign(x) * sign(y) * sign(z);
+	if (_sign > 0 && res < 0) { res = numeric_limits<double>::max(); }
+	if (_sign < 0 && res > 0) { res = numeric_limits<double>::min(); }
+	return res;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -201,6 +209,14 @@ ostream& operator<<(ostream& ostr, const Monome& to_out) {
 	char* degrees = (char*)(&to_out.degr_int);
 	ostr << " * x^" << degrees[0] << " * y^" << degrees[1] << " * z^" << degrees[2];
 	return ostr;
+}
+
+istream& operator>>(istream& istr, Monome& to_in) {
+	istr >> to_in.coeff; int in_deg_int = 0;
+	char* degrees = (char*)(&in_deg_int);
+	for (int i = 0; i < 3; ++i) { istr >> degrees[i]; }
+	to_in.degr_int = in_deg_int;
+	return istr;
 }
 
 // ------------------------------------------------------------------------------------------------

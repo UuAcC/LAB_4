@@ -14,12 +14,12 @@ public:
 	// class is triviable copyable, do we really need cope and move constructors?
 	// класс тривиально копируемый, реально надо конструктор копирования и присваивания?
 
-	Monome& operator+(const Monome& other) const;
-	Monome& operator-(const Monome& other) const;
-	Monome& operator*(const Monome& other) const;
-	Monome& operator/(const Monome& other) const;
-	Monome& operator*(double c) const;
-	Monome& operator/(double c) const;
+	Monome operator+(const Monome& other) const;
+	Monome operator-(const Monome& other) const;
+	Monome operator*(const Monome& other) const;
+	Monome operator/(const Monome& other) const;
+	Monome operator*(double c) const;
+	Monome operator/(double c) const;
 
 	Monome& operator+=(const Monome& other);
 	Monome& operator-=(const Monome& other);
@@ -28,7 +28,7 @@ public:
 	Monome& operator*=(double c);
 	Monome& operator/=(double c);
 
-	Monome& operator-() const;
+	Monome operator-() const;
 
 	int is_similar_to(const Monome& other) const;
 	int operator==(const Monome& other) const;
