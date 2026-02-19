@@ -11,7 +11,6 @@ struct HLink {
 	HLink(const T& _val, HLink* _next) : val(_val), next(_next) {}
 };
 
-
 template<class T>
 class Iterator {
 	HLink<T>* curr;
@@ -28,6 +27,7 @@ public:
 
 template<class T>
 class HList {
+protected:
 	HLink<T>* head;
 	HLink<T>* last;
 	HLink<T>* addAfter(HLink<T>* p, T val) {

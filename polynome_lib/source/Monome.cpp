@@ -4,18 +4,18 @@
 // ----------------< regular operators >-----------------------------------------------------------
 
 Monome Monome::operator+(const Monome& other) const {
-	if (this->degr_int != other.degr_int) throw - 1;
+	if (this->degr.N != other.degr.N) throw - 1;
 	double sum = this->coeff + other.coeff;
 	if (sum < 0 && this->coeff > 0 && other.coeff > 0) { sum = std::numeric_limits<double>::max(); }
 	if (sum > 0 && this->coeff < 0 && other.coeff < 0) { sum = std::numeric_limits<double>::min(); }
-	return Monome(sum, this->degr_int);
+	return Monome(sum, this->degr);
 }
 Monome Monome::operator-(const Monome& other) const {
-	if (this->degr_int != other.degr_int) throw - 1;
+	if (this->degr.N != other.degr.N) throw - 1;
 	double dif = this->coeff - other.coeff;
 	if (dif < 0 && this->coeff > 0 && other.coeff < 0) { dif = std::numeric_limits<double>::max(); }
 	if (dif > 0 && this->coeff < 0 && other.coeff > 0) { dif = std::numeric_limits<double>::min(); }
-	return Monome(dif, this->degr_int);
+	return Monome(dif, this->degr);
 }
 Monome Monome::operator*(const Monome& other) const {
 	double mul = this->coeff * other.coeff;
@@ -25,15 +25,13 @@ Monome Monome::operator*(const Monome& other) const {
 	if (mul > 0 && ((this->coeff < 0 && other.coeff > 0) || (this->coeff > 0 && other.coeff < 0))) {
 		mul = std::numeric_limits<double>::min();
 	}
-	Monome res(mul, this->degr_int);
-	char* r_degrees = (char*)(&res.degr_int);
-	char* o_degrees = (char*)(&other.degr_int);
+	Monome res(mul, this->degr);
 	for (int i = 0; i < 3; ++i) {
-		char r_d_i = r_degrees[i], o_d_i = o_degrees[i];
+		char r_d_i = res.degr.s[i], o_d_i = other.degr.s[i];
 		char sum = r_d_i + o_d_i;
-		if (sum < 0 && r_d_i > 0 && o_d_i > 0) { r_degrees[i] = CHAR_MAX; continue; }
-		if (sum > 0 && r_d_i < 0 && o_d_i < 0) { r_degrees[i] = CHAR_MIN; continue; }
-		r_degrees[i] = sum;
+		//if (sum > DEGR_MAX) { res.degr.s[i] = DEGR_MAX; continue; }
+		//if (sum < DEGR_MIN) { res.degr.s[i] = DEGR_MIN; continue; }
+		res.degr.s[i] = sum;
 	}
 	return res;
 }
@@ -45,15 +43,13 @@ Monome Monome::operator/(const Monome& other) const {
 	if (div > 0 && ((this->coeff < 0 && other.coeff > 0) || (this->coeff > 0 && other.coeff < 0))) {
 		div = std::numeric_limits<double>::min();
 	}
-	Monome res(div, this->degr_int);
-	char* r_degrees = (char*)(&res.degr_int);
-	char* o_degrees = (char*)(&other.degr_int);
+	Monome res(div, this->degr);
 	for (int i = 0; i < 3; ++i) {
-		char r_d_i = r_degrees[i], o_d_i = o_degrees[i];
+		char r_d_i = res.degr.s[i], o_d_i = other.degr.s[i];
 		char dif = r_d_i - o_d_i;
-		if (dif < 0 && r_d_i > 0 && o_d_i < 0) { r_degrees[i] = CHAR_MAX; continue; }
-		if (dif > 0 && r_d_i < 0 && o_d_i > 0) { r_degrees[i] = CHAR_MIN; continue; }
-		r_degrees[i] = dif;
+		//if (dif > DEGR_MAX) { res.degr.s[i] = DEGR_MAX; continue; }
+		//if (dif < DEGR_MIN) { res.degr.s[i] = DEGR_MIN; continue; }
+		res.degr.s[i] = dif;
 	}
 	return res;
 }
@@ -65,7 +61,7 @@ Monome Monome::operator*(double c) const {
 	if (mul > 0 && ((this->coeff < 0 && c > 0) || (this->coeff > 0 && c < 0))) {
 		mul = std::numeric_limits<double>::min();
 	}
-	return Monome(mul, this->degr_int);
+	return Monome(mul, this->degr);
 }
 Monome Monome::operator/(double c) const {
 	double div = this->coeff / c;
@@ -75,7 +71,7 @@ Monome Monome::operator/(double c) const {
 	if (div > 0 && ((this->coeff < 0 && c > 0) || (this->coeff > 0 && c < 0))) {
 		div = std::numeric_limits<double>::min();
 	}
-	return Monome(div, this->degr_int);
+	return Monome(div, this->degr);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -83,7 +79,7 @@ Monome Monome::operator/(double c) const {
 // ----------------< smth= operators >-------------------------------------------------------------
 
 Monome& Monome::operator+=(const Monome& other) {
-	if (this->degr_int != other.degr_int) throw - 1;
+	if (this->degr.N != other.degr.N) throw - 1;
 	double sum = this->coeff + other.coeff;
 	if (sum < 0 && this->coeff > 0 && other.coeff > 0) { sum = std::numeric_limits<double>::max(); }
 	if (sum > 0 && this->coeff < 0 && other.coeff < 0) { sum = std::numeric_limits<double>::min(); }
@@ -91,7 +87,7 @@ Monome& Monome::operator+=(const Monome& other) {
 	return *this;
 }
 Monome& Monome::operator-=(const Monome& other) {
-	if (this->degr_int != other.degr_int) throw - 1;
+	if (this->degr.N != other.degr.N) throw - 1;
 	double dif = this->coeff - other.coeff;
 	if (dif < 0 && this->coeff > 0 && other.coeff < 0) { dif = std::numeric_limits<double>::max(); }
 	if (dif > 0 && this->coeff < 0 && other.coeff > 0) { dif = std::numeric_limits<double>::min(); }
@@ -107,14 +103,12 @@ Monome& Monome::operator*=(const Monome& other) {
 		mul = std::numeric_limits<double>::min();
 	}
 	this->coeff = mul;
-	char* r_degrees = (char*)(&this->degr_int);
-	char* o_degrees = (char*)(&other.degr_int);
 	for (int i = 0; i < 3; ++i) {
-		char r_d_i = r_degrees[i], o_d_i = o_degrees[i];
+		char r_d_i = this->degr.s[i], o_d_i = other.degr.s[i];
 		char sum = r_d_i + o_d_i;
-		if (sum < 0 && r_d_i > 0 && o_d_i > 0) { r_degrees[i] = CHAR_MAX; continue; }
-		if (sum > 0 && r_d_i < 0 && o_d_i < 0) { r_degrees[i] = CHAR_MIN; continue; }
-		r_degrees[i] = sum;
+		//if (sum > DEGR_MAX) { this->degr.s[i] = DEGR_MAX; continue; }
+		//if (sum < DEGR_MIN) { this->degr.s[i] = DEGR_MIN; continue; }
+		this->degr.s[i] = sum;
 	}
 	return *this;
 }
@@ -127,14 +121,12 @@ Monome& Monome::operator/=(const Monome& other) {
 		div = std::numeric_limits<double>::min();
 	}
 	this->coeff = div;
-	char* r_degrees = (char*)(&this->degr_int);
-	char* o_degrees = (char*)(&other.degr_int);
 	for (int i = 0; i < 3; ++i) {
-		char r_d_i = r_degrees[i], o_d_i = o_degrees[i];
+		char r_d_i = this->degr.s[i], o_d_i = other.degr.s[i];
 		char dif = r_d_i - o_d_i;
-		if (dif < 0 && r_d_i > 0 && o_d_i < 0) { r_degrees[i] = CHAR_MAX; continue; }
-		if (dif > 0 && r_d_i < 0 && o_d_i > 0) { r_degrees[i] = CHAR_MIN; continue; }
-		r_degrees[i] = dif;
+		//if (dif > DEGR_MAX) { this->degr.s[i] = DEGR_MAX; continue; }
+		//if (dif < DEGR_MIN) { this->degr.s[i] = DEGR_MIN; continue; }
+		this->degr.s[i] = dif;
 	}
 	return *this;
 }
@@ -166,7 +158,7 @@ Monome& Monome::operator/=(double c){
 // ----------------< Unary operator- >-------------------------------------------------------------
 
 Monome Monome::operator-() const {
-	return Monome(-this->coeff, this->degr_int);
+	return Monome(-this->coeff, this->degr);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -174,7 +166,7 @@ Monome Monome::operator-() const {
 // ----------------< Comparators >-----------------------------------------------------------------
 
 int Monome::is_similar_to(const Monome& other) const {
-	return this->degr_int == other.degr_int;
+	return this->degr.N == other.degr.N;
 }
 int Monome::operator==(const Monome& other) const {
 	if (this->is_similar_to(other)) {
@@ -182,19 +174,22 @@ int Monome::operator==(const Monome& other) const {
 	} return 0;
 }
 int Monome::operator!=(const Monome& other) const {
-	return !(this->operator==(other));
+	return -(this->operator==(other));
 }
 
 // ------------------------------------------------------------------------------------------------
 
-// --------< Calculating value in point >----------------------------------------------------------
+// ----------------< Calculating value in point >--------------------------------------------------
 
-int sign(double x) { return (x > 0) ? 1 : ((x < 0) ? -1 : 0); }
+static int sign(double x) { return (x > 0) ? 1 : ((x < 0) ? -1 : 0); }
 
 double Monome::value_in_point(double x, double y, double z) const {
-	char* degrees = (char*)(&this->degr_int);
-	double res = this->coeff * pow(x, degrees[0]) * pow(y, degrees[1]) * pow(z, degrees[2]);
-	double _sign = sign(this->coeff) * sign(x) * sign(y) * sign(z);
+	double xr = pow(x, this->degr.s[X]);
+	double yr = pow(y, this->degr.s[Y]);
+	double zr = pow(z, this->degr.s[Z]);
+
+	double res = this->coeff * xr * yr * zr;
+	double _sign = sign(this->coeff) * sign(xr) * sign(yr) * sign(zr);
 	if (_sign > 0 && res < 0) { res = numeric_limits<double>::max(); }
 	if (_sign < 0 && res > 0) { res = numeric_limits<double>::min(); }
 	return res;
@@ -206,17 +201,42 @@ double Monome::value_in_point(double x, double y, double z) const {
 
 ostream& operator<<(ostream& ostr, const Monome& to_out) {
 	ostr << to_out.coeff;
-	char* degrees = (char*)(&to_out.degr_int);
-	ostr << " * x^" << degrees[0] << " * y^" << degrees[1] << " * z^" << degrees[2];
+	ostr << " * x^" << to_out.degr.s[X]
+		<< " * y^" << to_out.degr.s[Y]
+		<< " * z^" << to_out.degr.s[Z];
 	return ostr;
 }
 
 istream& operator>>(istream& istr, Monome& to_in) {
-	istr >> to_in.coeff; int in_deg_int = 0;
-	char* degrees = (char*)(&in_deg_int);
-	for (int i = 0; i < 3; ++i) { istr >> degrees[i]; }
-	to_in.degr_int = in_deg_int;
+	istr >> to_in.coeff; degrees in_deg = 0;
+
+	for (int i = 0; i < 3; ++i) { istr >> in_deg.s[i]; }
+	to_in.degr = in_deg;
 	return istr;
 }
 
 // ------------------------------------------------------------------------------------------------
+
+/// int main() {
+///		unsigned N = 0; 
+/// 
+///		int i1 = 10;
+///		int i2 = 5;
+/// 
+///		N |= i1;
+///		N |= i2 << 4;
+/// 
+///		int m = 15;
+/// 
+///		int i1s = N & m;
+///		int i2s = N >> 4 & m;
+/// }
+/// 
+/// 
+/// тз:
+/// над полиномами: + - * вычислить значение
+/// диапозон степеней [-5; 10]
+/// если хотя бы одна переменная не в диапозоне степеней после каких-л. вычислений - отбрасываем, он не нужен
+/// попробовать NTLR или конечный автомат, чтобы полином мог вводиться как 1.5 * x^2 * y^3 + -2 * x^4 * z^-2
+/// юзаем юнион
+/// под звездочкой: можно попробовать списки с пропуском КОТОРЫЕ ХОДИМ НА ПОЛОВИНКУ, НА ЧЕТВЕРТИНКУ И ТД
