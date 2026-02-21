@@ -39,6 +39,13 @@ public:
 	HList() { head = new HLink<T>(); last = head; }
 	void addFirst(T val) { addAfter(head, val); }
 	void addLast(T val) { last = addAfter(last, val); }
+	void insertAfter(int i, T val) {
+		HLink<T>* t = head; int j = 0;
+		while ((head != last) && (j < i)) {
+			t = t->next; ++i;
+		} if (j != i) throw - 1;
+		addAfter(t->next, val);
+	}
 	void clear() { while (head != last) { delFirst(); } }
 	~HList() { clear(); delete head; }
 	void delFirst() {

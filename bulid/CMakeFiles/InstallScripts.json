@@ -1,0 +1,13 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/cmake_install.cmake",
+		"C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/lists_lib/cmake_install.cmake",
+		"C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/polynome_lib/cmake_install.cmake",
+		"C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/googletest/cmake_install.cmake",
+		"C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/googletest/googlemock/cmake_install.cmake",
+		"C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/googletest/googletest/cmake_install.cmake",
+		"C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/tests/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
