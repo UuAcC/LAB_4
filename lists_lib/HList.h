@@ -83,6 +83,7 @@ public:
 			addLast(t1->val);
 			t1 = t1->next;
 		}
+		return *this;
 	}
 	friend std::ostream& operator<<(std::ostream& out, const HList<T>& list) {
 		Iterator<T> iter = list.itr(); out << "[ ";

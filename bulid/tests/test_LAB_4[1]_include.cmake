@@ -1,5 +1,0 @@
-if(EXISTS "C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/tests/test_LAB_4[1]_tests.cmake")
-  include("C:/Users/Maxim/source/repos/practice/SECOND_COURSE/2026.02.12/LAB_4/bulid/tests/test_LAB_4[1]_tests.cmake")
-else()
-  add_test(test_LAB_4_NOT_BUILT test_LAB_4_NOT_BUILT)
-endif()
