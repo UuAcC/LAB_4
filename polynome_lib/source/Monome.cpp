@@ -107,7 +107,7 @@ Monome& Monome::operator*=(const Monome& other) {
 		char r_d_i = this->degr.s[i], o_d_i = other.degr.s[i];
 		char sum = r_d_i + o_d_i;
 		//if (sum > DEGR_MAX) { this->degr.s[i] = DEGR_MAX; continue; }
-		//if (sum < DEGR_MIN) { this->degr.s[i] = DEGR_MIN; continue; }
+		//if (sum < DEGR_MIN) { this->degr.s[i] = DEGR_MIN; continue; } можно швырнуть исключение
 		this->degr.s[i] = sum;
 	}
 	return *this;

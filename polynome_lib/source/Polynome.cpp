@@ -9,6 +9,16 @@ bool Polynome::monome_check(const Monome& m) const {
     return flag;
 }
 
+Polynome& Polynome::operator=(const Polynome& other) {
+    if (this != &other) { HList<Monome>::operator=(other); }
+    return *this;
+}
+
+Polynome& Polynome::operator=(Polynome&& other) noexcept {
+    if (this != &other) { HList<Monome>::operator=(std::move(other)); }
+    return *this;
+}
+
 Polynome Polynome::operator+(const Polynome& other) const {
     Polynome res;
     Iterator<Monome> first = this->itr();

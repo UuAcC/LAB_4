@@ -37,6 +37,38 @@ protected:
 	}
 public:
 	HList() { head = new HLink<T>(); last = head; }
+	HList(const HList<T>& other) {
+		HLink<T>* t1 = other.head->next;
+		head = new HLink<T>();
+		last = head;
+		while (t1 != other.head) {
+			addLast(t1->val);
+			t1 = t1->next;
+		}
+	}
+	HList<T>& operator=(const HList<T>& other) {
+		if (this == &other) return *this;
+		this->clear(); delete this->head;
+		HLink<T>* t1 = other.head->next;
+		head = new HLink<T>();
+		last = head;
+		while (t1 != other.head) {
+			addLast(t1->val);
+			t1 = t1->next;
+		}
+		return *this;
+	}
+	HList(HList<T>&& other) noexcept {
+		head = other.head; other.head = nullptr;
+		last = other.last; other.last = nullptr;
+	}
+	HList<T>& operator=(HList<T>&& other) noexcept {
+		if (this == &other) return *this;
+		this->clear(); delete this->head;
+		head = other.head; other.head = nullptr;
+		last = other.last; other.last = nullptr;
+		return *this;
+	}
 	void addFirst(T val) { addAfter(head, val); }
 	void addLast(T val) { last = addAfter(last, val); }
 	void insertAfter(int i, T val) {
@@ -64,27 +96,6 @@ public:
 		t->next = head; last = t;
 	}
 	Iterator<T> itr() const { return Iterator<T>(head->next, head); }
-	HList(const HList<T>& other) {
-		HLink<T>* t1 = other.head->next;
-		head = new HLink<T>();
-		last = head;
-		while (t1 != other.head) {
-			addLast(t1->val);
-			t1 = t1->next;
-		}
-	}
-	HList<T>& operator=(const HList<T>& other) {
-		if (this == &other) return *this;
-		this->clear(); delete this->head;
-		HLink<T>* t1 = other.head->next;
-		head = new HLink<T>();
-		last = head;
-		while (t1 != other.head) {
-			addLast(t1->val);
-			t1 = t1->next;
-		}
-		return *this;
-	}
 	friend std::ostream& operator<<(std::ostream& out, const HList<T>& list) {
 		Iterator<T> iter = list.itr(); out << "[ ";
 		if (iter.hasNext()) { out << iter.next(); }
