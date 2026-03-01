@@ -2,6 +2,7 @@
 
 #include "HList.h"
 #include "Monome.h"
+#include <string>
 
 class Polynome : private HList<Monome> {
 	using HList<Monome>::head;
@@ -9,7 +10,8 @@ class Polynome : private HList<Monome> {
 	bool monome_check(const Monome& m) const;
 public:
 	Polynome() : HList<Monome>() {}
-	Polynome(const Monome& mon) : HList<Monome>() { this->addLast(mon); };
+	Polynome(const Monome& mon);
+	Polynome(std::string str);
 
 	Polynome(const Polynome& other) : HList<Monome>(other) {}
 	Polynome& operator=(const Polynome& other);
@@ -36,4 +38,6 @@ public:
 	Polynome& operator/=(const Monome& mon);
 
 	double calculate(double x, double y, double z) const;
+
+	friend ostream& operator<<(ostream& ostr, const Polynome& to_out);
 };

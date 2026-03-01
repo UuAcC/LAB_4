@@ -10,4 +10,8 @@ if(MSVC)
 endif()
 
 set_target_properties(${target} PROPERTIES LINKER_LANGUAGE CXX)
+
+target_include_directories(${target} PUBLIC ${ANTLR_RUNTIME_INCLUDE})
+target_link_libraries(${target} ${ANTLR_RUNTIME_LIB_PATH})
+
 target_link_libraries(${target} ${LIBRARY_DEPS})

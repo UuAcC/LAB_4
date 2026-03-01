@@ -13,9 +13,14 @@ public:
     virtual std::any visitFinalMonome(poly_gramParser::FinalMonomeContext* ctx) override {
         Monome res = Monome();
         res.set_coefficient(std::any_cast<double>(visit(ctx->coeff())));
-        res.set_degree(X, std::any_cast<char>(visit(ctx->variable(0))));
-        res.set_degree(Y, std::any_cast<char>(visit(ctx->variable(1))));
-        res.set_degree(Z, std::any_cast<char>(visit(ctx->variable(2))));
+
+        int xd = std::any_cast<int>(visit(ctx->variable(0)));
+        int yd = std::any_cast<int>(visit(ctx->variable(1)));
+        int zd = std::any_cast<int>(visit(ctx->variable(2)));
+
+        res.set_degree(X, static_cast<char>(xd));
+        res.set_degree(Y, static_cast<char>(yd));
+        res.set_degree(Z, static_cast<char>(zd));
         return res;
     }
     virtual std::any visitSumOfMonomesPolynome(poly_gramParser::SumOfMonomesPolynomeContext* ctx) override {
@@ -30,11 +35,11 @@ public:
         return visit(ctx->degree());
     }
     virtual std::any visitUnaryMinusDegree(poly_gramParser::UnaryMinusDegreeContext* ctx) override {
-        char res = std::any_cast<char>(visit(ctx->degree()));
+        int res = std::any_cast<int>(visit(ctx->degree()));
         return -res;
     }
     virtual std::any visitChar(poly_gramParser::CharContext* ctx) override {
-        return (char)std::stoi(ctx->CHAR()->getText());
+        return std::stoi(ctx->CHAR()->getText());
     }
     virtual std::any visitDouble(poly_gramParser::DoubleContext* ctx) override {
         return std::stod(ctx->DOUBLE()->getText());

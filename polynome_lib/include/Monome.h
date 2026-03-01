@@ -41,9 +41,9 @@ public:
 
 	Monome operator-() const;
 
-	int is_similar_to(const Monome& other) const;
-	int operator==(const Monome& other) const;
-	int operator!=(const Monome& other) const;
+	bool is_similar_to(const Monome& other) const;
+	bool operator==(const Monome& other) const;
+	bool operator!=(const Monome& other) const;
 
 	inline void set_coefficient(double c) { this->coeff = c; }
 	inline void set_degree(variables var, char d) { char* deg = (char*)&this->degr; deg[var] = d; }

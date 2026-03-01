@@ -1,10 +1,8 @@
-#include <iostream>
+#include <gtest/gtest.h>
 #include "Polynome.h"
+#include <sstream>
 
-int main() {
-	degrees deg = 0, odeg = 0;
-	deg.s[X] = 5; odeg.s[Y] = 10;
-	std::cout << (deg.N > odeg.N);
-
-	return 0;
+int main(int argc, char** argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

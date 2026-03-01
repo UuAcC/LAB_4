@@ -165,16 +165,16 @@ Monome Monome::operator-() const {
 
 // ----------------< Comparators >-----------------------------------------------------------------
 
-int Monome::is_similar_to(const Monome& other) const {
+bool Monome::is_similar_to(const Monome& other) const {
 	return this->degr.N == other.degr.N;
 }
-int Monome::operator==(const Monome& other) const {
+bool Monome::operator==(const Monome& other) const {
 	if (this->is_similar_to(other)) {
 		return this->coeff == other.coeff;
-	} return 0;
+	} return false;
 }
-int Monome::operator!=(const Monome& other) const {
-	return -(this->operator==(other));
+bool Monome::operator!=(const Monome& other) const {
+	return !(this->operator==(other));
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -201,9 +201,9 @@ double Monome::value_in_point(double x, double y, double z) const {
 
 ostream& operator<<(ostream& ostr, const Monome& to_out) {
 	ostr << to_out.coeff;
-	ostr << " * x^" << to_out.degr.s[X]
-		<< " * y^" << to_out.degr.s[Y]
-		<< " * z^" << to_out.degr.s[Z];
+	ostr << " * x^" << static_cast<int>(to_out.degr.s[X])
+		<< " * y^" << static_cast<int>(to_out.degr.s[Y])
+		<< " * z^" << static_cast<int>(to_out.degr.s[Z]);
 	return ostr;
 }
 

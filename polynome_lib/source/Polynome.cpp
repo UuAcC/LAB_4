@@ -1,4 +1,9 @@
 #include "Polynome.h"
+#include <sstream>
+#include "antlr4-runtime.h"
+#include "poly_gramUserVisitor.h"
+#include "poly_gramLexer.h"
+#include "poly_gramParser.h"
 
 bool Polynome::monome_check(const Monome& m) const {
     bool flag = true;
@@ -7,6 +12,18 @@ bool Polynome::monome_check(const Monome& m) const {
         flag &= (p <= DEGR_MAX && p >= DEGR_MIN);
     }
     return flag;
+}
+
+Polynome::Polynome(const Monome& mon) : HList<Monome>() { this->addLast(mon); }
+
+Polynome::Polynome(std::string str) : HList<Monome>() {
+    std::stringstream stream(str);
+    antlr4::ANTLRInputStream input(stream);
+    poly_gramLexer lexer(&input);
+    antlr4::CommonTokenStream tokens(&lexer);
+    poly_gramParser parser(&tokens);
+    UserVisitor visitor;
+    this->operator=(std::any_cast<Polynome>(visitor.visit(parser.polynome())));
 }
 
 Polynome& Polynome::operator=(const Polynome& other) {
@@ -23,22 +40,35 @@ Polynome Polynome::operator+(const Polynome& other) const {
     Polynome res;
     Iterator<Monome> first = this->itr();
     Iterator<Monome> second = other.itr();
-    Monome fcurr, scurr;
-    if (first.hasNext()) { fcurr = first.next(); }
-    if (second.hasNext()) { scurr = second.next(); }
+    Monome fcurr, scurr; 
+    bool move_f = true, move_s = true;
     while (first.hasNext() && second.hasNext()) {
+        if (move_f) { fcurr = first.next(); move_f = false; }
+        if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
         degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
         if (fcurr.is_similar_to(scurr)) {
-            res.addLast(Monome(fc + sc, fd)); fcurr = first.next(); scurr = second.next();
+            Monome to_add = fcurr + scurr;
+            if (monome_check(to_add)) { res.addLast(to_add); }
+            move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { res.addLast(fcurr); fcurr = first.next(); }
-            else { res.addLast(scurr); scurr = second.next(); }
+            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            else { if (monome_check(scurr)) { res.addLast(scurr); } move_s = true; }
         }
     }
-    while (first.hasNext()) { res.addLast(fcurr); fcurr = first.next(); }
-    while (second.hasNext()) { res.addLast(scurr); scurr = second.next(); }
+    if (!move_f && monome_check(fcurr)) { res.addLast(fcurr); }
+    if (!move_s && monome_check(scurr)) { res.addLast(scurr); }
+    while (first.hasNext()) {
+        fcurr = first.next();
+        if (monome_check(fcurr))
+            res.addLast(fcurr);
+    }
+    while (second.hasNext()) {
+        scurr = second.next();
+        if (monome_check(scurr))
+            res.addLast(scurr);
+    }
     return res;
 }
 
@@ -47,21 +77,34 @@ Polynome Polynome::operator-(const Polynome& other) const {
     Iterator<Monome> first = this->itr();
     Iterator<Monome> second = other.itr();
     Monome fcurr, scurr;
-    if (first.hasNext()) { fcurr = first.next(); }
-    if (second.hasNext()) { scurr = second.next(); }
+    bool move_f = true, move_s = true;
     while (first.hasNext() && second.hasNext()) {
+        if (move_f) { fcurr = first.next(); move_f = false; }
+        if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
         degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
         if (fcurr.is_similar_to(scurr)) {
-            res.addLast(Monome(fc - sc, fd)); fcurr = first.next(); scurr = second.next();
+            Monome to_add = fcurr - scurr;
+            if (monome_check(to_add)) { res.addLast(to_add); }
+            move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { res.addLast(fcurr); fcurr = first.next(); }
-            else { res.addLast(-scurr); scurr = second.next(); }
+            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            else { if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; }
         }
     }
-    while (first.hasNext()) { res.addLast(fcurr); fcurr = first.next(); }
-    while (second.hasNext()) { res.addLast(-scurr); scurr = second.next(); }
+    if (!move_f && monome_check(fcurr)) { res.addLast(fcurr); }
+    if (!move_s && monome_check(scurr)) { res.addLast(-scurr); }
+    while (first.hasNext()) {
+        fcurr = first.next();
+        if (monome_check(fcurr))
+            res.addLast(fcurr);
+    }
+    while (second.hasNext()) {
+        scurr = second.next();
+        if (monome_check(scurr))
+            res.addLast(-scurr);
+    }
     return res;
 }
 
@@ -87,21 +130,34 @@ Polynome& Polynome::operator+=(const Polynome& other) {
     Iterator<Monome> first = this->itr();
     Iterator<Monome> second = other.itr();
     Monome fcurr, scurr;
-    if (first.hasNext()) { fcurr = first.next(); }
-    if (second.hasNext()) { scurr = second.next(); }
+    bool move_f = true, move_s = true;
     while (first.hasNext() && second.hasNext()) {
+        if (move_f) { fcurr = first.next(); move_f = false; }
+        if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
         degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
         if (fcurr.is_similar_to(scurr)) {
-            res.addLast(Monome(fc + sc, fd)); fcurr = first.next(); scurr = second.next();
+            Monome to_add = fcurr + scurr;
+            if (monome_check(to_add)) { res.addLast(to_add); }
+            move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { res.addLast(fcurr); fcurr = first.next(); }
-            else { res.addLast(scurr); scurr = second.next(); }
+            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            else { if (monome_check(scurr)) { res.addLast(scurr); } move_s = true; }
         }
     }
-    while (first.hasNext()) { res.addLast(fcurr); fcurr = first.next(); }
-    while (second.hasNext()) { res.addLast(scurr); scurr = second.next(); }
+    if (!move_f && monome_check(fcurr)) { res.addLast(fcurr); }
+    if (!move_s && monome_check(scurr)) { res.addLast(scurr); }
+    while (first.hasNext()) {
+        fcurr = first.next();
+        if (monome_check(fcurr))
+            res.addLast(fcurr);
+    }
+    while (second.hasNext()) {
+        scurr = second.next();
+        if (monome_check(scurr))
+            res.addLast(scurr);
+    }
     this->operator=(res);
     return *this;
 }
@@ -111,21 +167,34 @@ Polynome& Polynome::operator-=(const Polynome& other) {
     Iterator<Monome> first = this->itr();
     Iterator<Monome> second = other.itr();
     Monome fcurr, scurr;
-    if (first.hasNext()) { fcurr = first.next(); }
-    if (second.hasNext()) { scurr = second.next(); }
+    bool move_f = true, move_s = true;
     while (first.hasNext() && second.hasNext()) {
+        if (move_f) { fcurr = first.next(); move_f = false; }
+        if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
         degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
         if (fcurr.is_similar_to(scurr)) {
-            res.addLast(Monome(fc - sc, fd)); fcurr = first.next(); scurr = second.next();
+            Monome to_add = fcurr - scurr;
+            if (monome_check(to_add)) { res.addLast(to_add); }
+            move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { res.addLast(fcurr); fcurr = first.next(); }
-            else { res.addLast(-scurr); scurr = second.next(); }
+            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            else { if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; }
         }
     }
-    while (first.hasNext()) { res.addLast(fcurr); fcurr = first.next(); }
-    while (second.hasNext()) { res.addLast(-scurr); scurr = second.next(); }
+    if (!move_f && monome_check(fcurr)) { res.addLast(fcurr); }
+    if (!move_s && monome_check(scurr)) { res.addLast(-scurr); }
+    while (first.hasNext()) { 
+        fcurr = first.next(); 
+        if (monome_check(fcurr))
+            res.addLast(fcurr);
+    }
+    while (second.hasNext()) {
+        scurr = second.next();
+        if (monome_check(scurr))
+            res.addLast(-scurr);
+    }
     this->operator=(res);
     return *this;
 }
@@ -224,4 +293,11 @@ double Polynome::calculate(double x, double y, double z) const {
         res += curr.value_in_point(x, y, z);
     }
     return res;
+}
+
+ostream& operator<<(ostream& ostr, const Polynome& to_out) {
+    Iterator<Monome> iter = to_out.itr();
+    if (iter.hasNext()) { ostr << iter.next(); }
+    while (iter.hasNext()) { ostr << " + " << iter.next(); }
+    return ostr;
 }
