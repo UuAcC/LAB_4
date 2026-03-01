@@ -13,7 +13,7 @@ class  poly_gramLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    COEFF = 8, DEG = 9, WS = 10, MUL = 11, ADD = 12
+    DOUBLE = 8, CHAR = 9, WS = 10, MUL = 11, ADD = 12
   };
 
   explicit poly_gramLexer(antlr4::CharStream *input);

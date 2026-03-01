@@ -9,6 +9,7 @@ class Polynome : private HList<Monome> {
 	bool monome_check(const Monome& m) const;
 public:
 	Polynome() : HList<Monome>() {}
+	Polynome(const Monome& mon) : HList<Monome>() { this->addLast(mon); };
 
 	Polynome(const Polynome& other) : HList<Monome>(other) {}
 	Polynome& operator=(const Polynome& other);

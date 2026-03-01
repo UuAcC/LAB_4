@@ -1,29 +1,26 @@
 grammar poly_gram;
 
-polynome: polynome ADD monome
-        | monome 
-        ;
+// Лексемы 
+DOUBLE: ('0' | [1-9][0-9]*) (('.' | ',') [0-9]+)?;
+CHAR  : [0-9]+ ;
+WS    : [ \t\r\n]+ -> skip ;
+MUL   : '*' ;
+ADD   : '+' ;
 
-monome  : '-' monome                                  
-        | '(' monome ')'                              
-        | COEFF MUL x_var MUL y_var MUL z_var
-        ;
+// Синтаксис
+polynome : polynome ADD monome # SumOfMonomesPolynome
+         | monome              # SingleMonomePolynome
+         ;
 
-x_var   : 'x' '^' DEG
-        ;
-y_var   : 'y' '^' DEG
-        ;
-z_var   : 'z' '^' DEG
-        ;
+monome   : '-' monome            # UnaryMinusMonome
+         | '(' monome ')'        # ParensMonome
+         | coeff MUL variable MUL variable MUL variable  # FinalMonome
+         ;
 
-COEFF : ('0' | [1-9][0-9]*) (('.' | ',') [0-9]+)?     
-      ;
-DEG   : [1-9][0-9]+    
-      | '-' DEG                            
-      ;
-WS    : [ \t\r\n]+ -> skip 
-      ;
-MUL   : '*' 
-      ;
-ADD   : '+' 
-      ;
+variable : var=('x'|'y'|'z') '^' degree ;
+
+degree   : '-' degree  # UnaryMinusDegree
+         | CHAR        # Char
+         ;
+
+coeff    : DOUBLE # Double ;                          
