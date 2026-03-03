@@ -7,27 +7,27 @@
 class PolynomeTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        m1 = Monome(2.0, degrees(5));
+        m1 = Monome(2.0, degrees());
         m1.set_degree(X, 2);
         m1.set_degree(Y, 1);
         m1.set_degree(Z, 0);
 
-        m2 = Monome(3.0, degrees(5));
+        m2 = Monome(3.0, degrees());
         m2.set_degree(X, 1);
         m2.set_degree(Y, 2);
         m2.set_degree(Z, 0);
 
-        m3 = Monome(1.0, degrees(3));
+        m3 = Monome(1.0, degrees());
         m3.set_degree(X, 0);
         m3.set_degree(Y, 1);
         m3.set_degree(Z, 1);
 
-        m4 = Monome(5.0, degrees(5));
+        m4 = Monome(5.0, degrees());
         m4.set_degree(X, 2);
         m4.set_degree(Y, 1);
         m4.set_degree(Z, 0);
 
-        zero_monome = Monome(0.0, degrees(0));
+        zero_monome = Monome(0.0, degrees());
         zero_monome.set_degree(X, 0);
         zero_monome.set_degree(Y, 0);
         zero_monome.set_degree(Z, 0);
@@ -52,7 +52,10 @@ TEST_F(PolynomeTest, ConstructorFromMonome) {
 }
 
 TEST_F(PolynomeTest, ConstructorFromString) {
-    GTEST_SKIP() << "String constructor not implemented";
+    Polynome p("2.0 * x^2 * y^1 * z^0 + 1.0 * x^0 * y^1 * z^1");
+    double expected = m1.value_in_point(2.0, 3.0, 4.0) +
+        m3.value_in_point(2.0, 3.0, 4.0);
+    EXPECT_EQ(p.calculate(2.0, 3.0, 4.0), expected);
 }
 
 TEST_F(PolynomeTest, CopyConstructor) {

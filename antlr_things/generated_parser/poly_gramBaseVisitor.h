@@ -35,7 +35,15 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitVariable(poly_gramParser::VariableContext *ctx) override {
+  virtual std::any visitX_var(poly_gramParser::X_varContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitY_var(poly_gramParser::Y_varContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitZ_var(poly_gramParser::Z_varContext *ctx) override {
     return visitChildren(ctx);
   }
 

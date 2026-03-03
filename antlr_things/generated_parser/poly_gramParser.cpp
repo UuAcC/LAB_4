@@ -52,31 +52,35 @@ void poly_gramParserInitialize() {
 #endif
   auto staticData = std::make_unique<Poly_gramParserStaticData>(
     std::vector<std::string>{
-      "polynome", "monome", "variable", "degree", "coeff"
+      "polynome", "monome", "x_var", "y_var", "z_var", "degree", "coeff"
     },
     std::vector<std::string>{
-      "", "'-'", "'('", "')'", "'x'", "'y'", "'z'", "'^'", "", "", "", "'*'", 
+      "", "'-'", "'('", "')'", "'x^'", "'y^'", "'z^'", "", "", "", "'*'", 
       "'+'"
     },
     std::vector<std::string>{
-      "", "", "", "", "", "", "", "", "DOUBLE", "CHAR", "WS", "MUL", "ADD"
+      "", "", "", "", "", "", "", "DOUBLE", "CHAR", "WS", "MUL", "ADD"
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,12,49,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,1,0,1,0,1,0,1,0,1,0,
-  	1,0,5,0,17,8,0,10,0,12,0,20,9,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  	1,1,1,1,1,1,1,1,1,3,1,36,8,1,1,2,1,2,1,2,1,2,1,3,1,3,1,3,3,3,45,8,3,1,
-  	4,1,4,1,4,0,1,0,5,0,2,4,6,8,0,1,1,0,4,6,47,0,10,1,0,0,0,2,35,1,0,0,0,
-  	4,37,1,0,0,0,6,44,1,0,0,0,8,46,1,0,0,0,10,11,6,0,-1,0,11,12,3,2,1,0,12,
-  	18,1,0,0,0,13,14,10,2,0,0,14,15,5,12,0,0,15,17,3,2,1,0,16,13,1,0,0,0,
-  	17,20,1,0,0,0,18,16,1,0,0,0,18,19,1,0,0,0,19,1,1,0,0,0,20,18,1,0,0,0,
-  	21,22,5,1,0,0,22,36,3,2,1,0,23,24,5,2,0,0,24,25,3,2,1,0,25,26,5,3,0,0,
-  	26,36,1,0,0,0,27,28,3,8,4,0,28,29,5,11,0,0,29,30,3,4,2,0,30,31,5,11,0,
-  	0,31,32,3,4,2,0,32,33,5,11,0,0,33,34,3,4,2,0,34,36,1,0,0,0,35,21,1,0,
-  	0,0,35,23,1,0,0,0,35,27,1,0,0,0,36,3,1,0,0,0,37,38,7,0,0,0,38,39,5,7,
-  	0,0,39,40,3,6,3,0,40,5,1,0,0,0,41,42,5,1,0,0,42,45,3,6,3,0,43,45,5,9,
-  	0,0,44,41,1,0,0,0,44,43,1,0,0,0,45,7,1,0,0,0,46,47,5,8,0,0,47,9,1,0,0,
-  	0,3,18,35,44
+  	4,1,11,63,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,1,0,
+  	1,0,1,0,1,0,1,0,1,0,5,0,21,8,0,10,0,12,0,24,9,0,1,1,1,1,1,1,1,1,1,1,1,
+  	1,1,1,1,1,1,1,3,1,35,8,1,1,1,1,1,3,1,39,8,1,1,1,1,1,3,1,43,8,1,3,1,45,
+  	8,1,1,2,1,2,1,2,1,3,1,3,1,3,1,4,1,4,1,4,1,5,1,5,1,5,3,5,59,8,5,1,6,1,
+  	6,1,6,0,1,0,7,0,2,4,6,8,10,12,0,0,62,0,14,1,0,0,0,2,44,1,0,0,0,4,46,1,
+  	0,0,0,6,49,1,0,0,0,8,52,1,0,0,0,10,58,1,0,0,0,12,60,1,0,0,0,14,15,6,0,
+  	-1,0,15,16,3,2,1,0,16,22,1,0,0,0,17,18,10,2,0,0,18,19,5,11,0,0,19,21,
+  	3,2,1,0,20,17,1,0,0,0,21,24,1,0,0,0,22,20,1,0,0,0,22,23,1,0,0,0,23,1,
+  	1,0,0,0,24,22,1,0,0,0,25,26,5,1,0,0,26,45,3,2,1,0,27,28,5,2,0,0,28,29,
+  	3,2,1,0,29,30,5,3,0,0,30,45,1,0,0,0,31,34,3,12,6,0,32,33,5,10,0,0,33,
+  	35,3,4,2,0,34,32,1,0,0,0,34,35,1,0,0,0,35,38,1,0,0,0,36,37,5,10,0,0,37,
+  	39,3,6,3,0,38,36,1,0,0,0,38,39,1,0,0,0,39,42,1,0,0,0,40,41,5,10,0,0,41,
+  	43,3,8,4,0,42,40,1,0,0,0,42,43,1,0,0,0,43,45,1,0,0,0,44,25,1,0,0,0,44,
+  	27,1,0,0,0,44,31,1,0,0,0,45,3,1,0,0,0,46,47,5,4,0,0,47,48,3,10,5,0,48,
+  	5,1,0,0,0,49,50,5,5,0,0,50,51,3,10,5,0,51,7,1,0,0,0,52,53,5,6,0,0,53,
+  	54,3,10,5,0,54,9,1,0,0,0,55,56,5,1,0,0,56,59,3,10,5,0,57,59,5,8,0,0,58,
+  	55,1,0,0,0,58,57,1,0,0,0,59,11,1,0,0,0,60,61,5,7,0,0,61,13,1,0,0,0,6,
+  	22,34,38,42,44,58
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -208,10 +212,10 @@ poly_gramParser::PolynomeContext* poly_gramParser::polynome(int precedence) {
     _ctx = _localctx;
     previousContext = _localctx;
 
-    setState(11);
+    setState(15);
     monome();
     _ctx->stop = _input->LT(-1);
-    setState(18);
+    setState(22);
     _errHandler->sync(this);
     alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 0, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
@@ -222,15 +226,15 @@ poly_gramParser::PolynomeContext* poly_gramParser::polynome(int precedence) {
         auto newContext = _tracker.createInstance<SumOfMonomesPolynomeContext>(_tracker.createInstance<PolynomeContext>(parentContext, parentState));
         _localctx = newContext;
         pushNewRecursionContext(newContext, startState, RulePolynome);
-        setState(13);
+        setState(17);
 
         if (!(precpred(_ctx, 2))) throw FailedPredicateException(this, "precpred(_ctx, 2)");
-        setState(14);
+        setState(18);
         match(poly_gramParser::ADD);
-        setState(15);
+        setState(19);
         monome(); 
       }
-      setState(20);
+      setState(24);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 0, _ctx);
     }
@@ -302,12 +306,16 @@ tree::TerminalNode* poly_gramParser::FinalMonomeContext::MUL(size_t i) {
   return getToken(poly_gramParser::MUL, i);
 }
 
-std::vector<poly_gramParser::VariableContext *> poly_gramParser::FinalMonomeContext::variable() {
-  return getRuleContexts<poly_gramParser::VariableContext>();
+poly_gramParser::X_varContext* poly_gramParser::FinalMonomeContext::x_var() {
+  return getRuleContext<poly_gramParser::X_varContext>(0);
 }
 
-poly_gramParser::VariableContext* poly_gramParser::FinalMonomeContext::variable(size_t i) {
-  return getRuleContext<poly_gramParser::VariableContext>(i);
+poly_gramParser::Y_varContext* poly_gramParser::FinalMonomeContext::y_var() {
+  return getRuleContext<poly_gramParser::Y_varContext>(0);
+}
+
+poly_gramParser::Z_varContext* poly_gramParser::FinalMonomeContext::z_var() {
+  return getRuleContext<poly_gramParser::Z_varContext>(0);
 }
 
 poly_gramParser::FinalMonomeContext::FinalMonomeContext(MonomeContext *ctx) { copyFrom(ctx); }
@@ -331,15 +339,15 @@ poly_gramParser::MonomeContext* poly_gramParser::monome() {
     exitRule();
   });
   try {
-    setState(35);
+    setState(44);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case poly_gramParser::T__0: {
         _localctx = _tracker.createInstance<poly_gramParser::UnaryMinusMonomeContext>(_localctx);
         enterOuterAlt(_localctx, 1);
-        setState(21);
+        setState(25);
         match(poly_gramParser::T__0);
-        setState(22);
+        setState(26);
         monome();
         break;
       }
@@ -347,11 +355,11 @@ poly_gramParser::MonomeContext* poly_gramParser::monome() {
       case poly_gramParser::T__1: {
         _localctx = _tracker.createInstance<poly_gramParser::ParensMonomeContext>(_localctx);
         enterOuterAlt(_localctx, 2);
-        setState(23);
+        setState(27);
         match(poly_gramParser::T__1);
-        setState(24);
+        setState(28);
         monome();
-        setState(25);
+        setState(29);
         match(poly_gramParser::T__2);
         break;
       }
@@ -359,20 +367,53 @@ poly_gramParser::MonomeContext* poly_gramParser::monome() {
       case poly_gramParser::DOUBLE: {
         _localctx = _tracker.createInstance<poly_gramParser::FinalMonomeContext>(_localctx);
         enterOuterAlt(_localctx, 3);
-        setState(27);
-        coeff();
-        setState(28);
-        match(poly_gramParser::MUL);
-        setState(29);
-        variable();
-        setState(30);
-        match(poly_gramParser::MUL);
         setState(31);
-        variable();
-        setState(32);
-        match(poly_gramParser::MUL);
-        setState(33);
-        variable();
+        coeff();
+        setState(34);
+        _errHandler->sync(this);
+
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 1, _ctx)) {
+        case 1: {
+          setState(32);
+          match(poly_gramParser::MUL);
+          setState(33);
+          x_var();
+          break;
+        }
+
+        default:
+          break;
+        }
+        setState(38);
+        _errHandler->sync(this);
+
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx)) {
+        case 1: {
+          setState(36);
+          match(poly_gramParser::MUL);
+          setState(37);
+          y_var();
+          break;
+        }
+
+        default:
+          break;
+        }
+        setState(42);
+        _errHandler->sync(this);
+
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx)) {
+        case 1: {
+          setState(40);
+          match(poly_gramParser::MUL);
+          setState(41);
+          z_var();
+          break;
+        }
+
+        default:
+          break;
+        }
         break;
       }
 
@@ -390,33 +431,32 @@ poly_gramParser::MonomeContext* poly_gramParser::monome() {
   return _localctx;
 }
 
-//----------------- VariableContext ------------------------------------------------------------------
+//----------------- X_varContext ------------------------------------------------------------------
 
-poly_gramParser::VariableContext::VariableContext(ParserRuleContext *parent, size_t invokingState)
+poly_gramParser::X_varContext::X_varContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-poly_gramParser::DegreeContext* poly_gramParser::VariableContext::degree() {
+poly_gramParser::DegreeContext* poly_gramParser::X_varContext::degree() {
   return getRuleContext<poly_gramParser::DegreeContext>(0);
 }
 
 
-size_t poly_gramParser::VariableContext::getRuleIndex() const {
-  return poly_gramParser::RuleVariable;
+size_t poly_gramParser::X_varContext::getRuleIndex() const {
+  return poly_gramParser::RuleX_var;
 }
 
 
-std::any poly_gramParser::VariableContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any poly_gramParser::X_varContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<poly_gramVisitor*>(visitor))
-    return parserVisitor->visitVariable(this);
+    return parserVisitor->visitX_var(this);
   else
     return visitor->visitChildren(this);
 }
 
-poly_gramParser::VariableContext* poly_gramParser::variable() {
-  VariableContext *_localctx = _tracker.createInstance<VariableContext>(_ctx, getState());
-  enterRule(_localctx, 4, poly_gramParser::RuleVariable);
-  size_t _la = 0;
+poly_gramParser::X_varContext* poly_gramParser::x_var() {
+  X_varContext *_localctx = _tracker.createInstance<X_varContext>(_ctx, getState());
+  enterRule(_localctx, 4, poly_gramParser::RuleX_var);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -427,20 +467,111 @@ poly_gramParser::VariableContext* poly_gramParser::variable() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(37);
-    antlrcpp::downCast<VariableContext *>(_localctx)->var = _input->LT(1);
-    _la = _input->LA(1);
-    if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 112) != 0))) {
-      antlrcpp::downCast<VariableContext *>(_localctx)->var = _errHandler->recoverInline(this);
-    }
-    else {
-      _errHandler->reportMatch(this);
-      consume();
-    }
-    setState(38);
-    match(poly_gramParser::T__6);
-    setState(39);
+    setState(46);
+    match(poly_gramParser::T__3);
+    setState(47);
+    degree();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- Y_varContext ------------------------------------------------------------------
+
+poly_gramParser::Y_varContext::Y_varContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+poly_gramParser::DegreeContext* poly_gramParser::Y_varContext::degree() {
+  return getRuleContext<poly_gramParser::DegreeContext>(0);
+}
+
+
+size_t poly_gramParser::Y_varContext::getRuleIndex() const {
+  return poly_gramParser::RuleY_var;
+}
+
+
+std::any poly_gramParser::Y_varContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<poly_gramVisitor*>(visitor))
+    return parserVisitor->visitY_var(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+poly_gramParser::Y_varContext* poly_gramParser::y_var() {
+  Y_varContext *_localctx = _tracker.createInstance<Y_varContext>(_ctx, getState());
+  enterRule(_localctx, 6, poly_gramParser::RuleY_var);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(49);
+    match(poly_gramParser::T__4);
+    setState(50);
+    degree();
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- Z_varContext ------------------------------------------------------------------
+
+poly_gramParser::Z_varContext::Z_varContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+poly_gramParser::DegreeContext* poly_gramParser::Z_varContext::degree() {
+  return getRuleContext<poly_gramParser::DegreeContext>(0);
+}
+
+
+size_t poly_gramParser::Z_varContext::getRuleIndex() const {
+  return poly_gramParser::RuleZ_var;
+}
+
+
+std::any poly_gramParser::Z_varContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<poly_gramVisitor*>(visitor))
+    return parserVisitor->visitZ_var(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+poly_gramParser::Z_varContext* poly_gramParser::z_var() {
+  Z_varContext *_localctx = _tracker.createInstance<Z_varContext>(_ctx, getState());
+  enterRule(_localctx, 8, poly_gramParser::RuleZ_var);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(52);
+    match(poly_gramParser::T__5);
+    setState(53);
     degree();
    
   }
@@ -500,7 +631,7 @@ std::any poly_gramParser::UnaryMinusDegreeContext::accept(tree::ParseTreeVisitor
 }
 poly_gramParser::DegreeContext* poly_gramParser::degree() {
   DegreeContext *_localctx = _tracker.createInstance<DegreeContext>(_ctx, getState());
-  enterRule(_localctx, 6, poly_gramParser::RuleDegree);
+  enterRule(_localctx, 10, poly_gramParser::RuleDegree);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -510,15 +641,15 @@ poly_gramParser::DegreeContext* poly_gramParser::degree() {
     exitRule();
   });
   try {
-    setState(44);
+    setState(58);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case poly_gramParser::T__0: {
         _localctx = _tracker.createInstance<poly_gramParser::UnaryMinusDegreeContext>(_localctx);
         enterOuterAlt(_localctx, 1);
-        setState(41);
+        setState(55);
         match(poly_gramParser::T__0);
-        setState(42);
+        setState(56);
         degree();
         break;
       }
@@ -526,7 +657,7 @@ poly_gramParser::DegreeContext* poly_gramParser::degree() {
       case poly_gramParser::CHAR: {
         _localctx = _tracker.createInstance<poly_gramParser::CharContext>(_localctx);
         enterOuterAlt(_localctx, 2);
-        setState(43);
+        setState(57);
         match(poly_gramParser::CHAR);
         break;
       }
@@ -577,7 +708,7 @@ std::any poly_gramParser::DoubleContext::accept(tree::ParseTreeVisitor *visitor)
 }
 poly_gramParser::CoeffContext* poly_gramParser::coeff() {
   CoeffContext *_localctx = _tracker.createInstance<CoeffContext>(_ctx, getState());
-  enterRule(_localctx, 8, poly_gramParser::RuleCoeff);
+  enterRule(_localctx, 12, poly_gramParser::RuleCoeff);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -589,7 +720,7 @@ poly_gramParser::CoeffContext* poly_gramParser::coeff() {
   try {
     _localctx = _tracker.createInstance<poly_gramParser::DoubleContext>(_localctx);
     enterOuterAlt(_localctx, 1);
-    setState(46);
+    setState(60);
     match(poly_gramParser::DOUBLE);
    
   }

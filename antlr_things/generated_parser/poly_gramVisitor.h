@@ -29,7 +29,11 @@ public:
 
     virtual std::any visitFinalMonome(poly_gramParser::FinalMonomeContext *context) = 0;
 
-    virtual std::any visitVariable(poly_gramParser::VariableContext *context) = 0;
+    virtual std::any visitX_var(poly_gramParser::X_varContext *context) = 0;
+
+    virtual std::any visitY_var(poly_gramParser::Y_varContext *context) = 0;
+
+    virtual std::any visitZ_var(poly_gramParser::Z_varContext *context) = 0;
 
     virtual std::any visitUnaryMinusDegree(poly_gramParser::UnaryMinusDegreeContext *context) = 0;
 

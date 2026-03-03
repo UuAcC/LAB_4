@@ -12,13 +12,13 @@
 class  poly_gramParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    DOUBLE = 8, CHAR = 9, WS = 10, MUL = 11, ADD = 12
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, DOUBLE = 7, 
+    CHAR = 8, WS = 9, MUL = 10, ADD = 11
   };
 
   enum {
-    RulePolynome = 0, RuleMonome = 1, RuleVariable = 2, RuleDegree = 3, 
-    RuleCoeff = 4
+    RulePolynome = 0, RuleMonome = 1, RuleX_var = 2, RuleY_var = 3, RuleZ_var = 4, 
+    RuleDegree = 5, RuleCoeff = 6
   };
 
   explicit poly_gramParser(antlr4::TokenStream *input);
@@ -40,7 +40,9 @@ public:
 
   class PolynomeContext;
   class MonomeContext;
-  class VariableContext;
+  class X_varContext;
+  class Y_varContext;
+  class Z_varContext;
   class DegreeContext;
   class CoeffContext; 
 
@@ -117,18 +119,18 @@ public:
     CoeffContext *coeff();
     std::vector<antlr4::tree::TerminalNode *> MUL();
     antlr4::tree::TerminalNode* MUL(size_t i);
-    std::vector<VariableContext *> variable();
-    VariableContext* variable(size_t i);
+    X_varContext *x_var();
+    Y_varContext *y_var();
+    Z_varContext *z_var();
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
   MonomeContext* monome();
 
-  class  VariableContext : public antlr4::ParserRuleContext {
+  class  X_varContext : public antlr4::ParserRuleContext {
   public:
-    antlr4::Token *var = nullptr;
-    VariableContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    X_varContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     DegreeContext *degree();
 
@@ -137,7 +139,33 @@ public:
    
   };
 
-  VariableContext* variable();
+  X_varContext* x_var();
+
+  class  Y_varContext : public antlr4::ParserRuleContext {
+  public:
+    Y_varContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    DegreeContext *degree();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  Y_varContext* y_var();
+
+  class  Z_varContext : public antlr4::ParserRuleContext {
+  public:
+    Z_varContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    DegreeContext *degree();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  Z_varContext* z_var();
 
   class  DegreeContext : public antlr4::ParserRuleContext {
   public:

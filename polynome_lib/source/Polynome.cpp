@@ -23,7 +23,8 @@ Polynome::Polynome(std::string str) : HList<Monome>() {
     antlr4::CommonTokenStream tokens(&lexer);
     poly_gramParser parser(&tokens);
     UserVisitor visitor;
-    this->operator=(std::any_cast<Polynome>(visitor.visit(parser.polynome())));
+    visitor.visit(parser.polynome());
+    this->operator=(visitor.result);
 }
 
 Polynome& Polynome::operator=(const Polynome& other) {

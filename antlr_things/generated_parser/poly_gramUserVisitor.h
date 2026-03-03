@@ -4,8 +4,8 @@
 #include "poly_gramBaseVisitor.h"
 
 class UserVisitor : public poly_gramBaseVisitor {
-    Polynome result;
 public:
+    Polynome result;
     virtual std::any visitUnaryMinusMonome(poly_gramParser::UnaryMinusMonomeContext* ctx) override {
         Monome res = std::any_cast<Monome>(visit(ctx->monome())); 
         return -res;
@@ -14,9 +14,9 @@ public:
         Monome res = Monome();
         res.set_coefficient(std::any_cast<double>(visit(ctx->coeff())));
 
-        int xd = std::any_cast<int>(visit(ctx->variable(0)));
-        int yd = std::any_cast<int>(visit(ctx->variable(1)));
-        int zd = std::any_cast<int>(visit(ctx->variable(2)));
+        int xd = std::any_cast<int>(visit(ctx->x_var()));
+        int yd = std::any_cast<int>(visit(ctx->y_var()));
+        int zd = std::any_cast<int>(visit(ctx->z_var()));
 
         res.set_degree(X, static_cast<char>(xd));
         res.set_degree(Y, static_cast<char>(yd));
@@ -26,12 +26,18 @@ public:
     virtual std::any visitSumOfMonomesPolynome(poly_gramParser::SumOfMonomesPolynomeContext* ctx) override {
         result = std::any_cast<Polynome>(visit(ctx->polynome()));
         result += std::any_cast<Monome>(visit(ctx->monome()));
-        return &result;
+        return 0;
     }
     virtual std::any visitSingleMonomePolynome(poly_gramParser::SingleMonomePolynomeContext* ctx) override {
         return Polynome(std::any_cast<Monome>(visit(ctx->monome())));
     }
-    virtual std::any visitVariable(poly_gramParser::VariableContext* ctx) override {
+    virtual std::any visitX_var(poly_gramParser::X_varContext* ctx) override {
+        return visit(ctx->degree());
+    }
+    virtual std::any visitY_var(poly_gramParser::Y_varContext* ctx) override {
+        return visit(ctx->degree());
+    }
+    virtual std::any visitZ_var(poly_gramParser::Z_varContext* ctx) override {
         return visit(ctx->degree());
     }
     virtual std::any visitUnaryMinusDegree(poly_gramParser::UnaryMinusDegreeContext* ctx) override {

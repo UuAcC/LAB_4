@@ -1,7 +1,7 @@
 grammar poly_gram;
 
 // Лексемы 
-DOUBLE: ('0' | [1-9][0-9]*) (('.' | ',') [0-9]+)?;
+DOUBLE: ('0' | [1-9][0-9]*) '.' [0-9]+;
 CHAR  : [0-9]+ ;
 WS    : [ \t\r\n]+ -> skip ;
 MUL   : '*' ;
@@ -14,13 +14,15 @@ polynome : polynome ADD monome # SumOfMonomesPolynome
 
 monome   : '-' monome            # UnaryMinusMonome
          | '(' monome ')'        # ParensMonome
-         | coeff MUL variable MUL variable MUL variable  # FinalMonome
+         | coeff (MUL x_var)? (MUL y_var)? (MUL z_var)?  # FinalMonome
          ;
 
-variable : var=('x'|'y'|'z') '^' degree ;
+x_var : 'x^' degree ;
+y_var : 'y^' degree ;
+z_var : 'z^' degree ;
 
 degree   : '-' degree  # UnaryMinusDegree
          | CHAR        # Char
          ;
 
-coeff    : DOUBLE # Double ;                          
+coeff    : DOUBLE # Double ;
