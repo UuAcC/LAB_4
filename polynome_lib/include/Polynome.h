@@ -4,6 +4,9 @@
 #include "Monome.h"
 #include <string>
 
+#define DEGR_MAX 10
+#define DEGR_MIN -5
+
 class Polynome : private HList<Monome> {
 	using HList<Monome>::head;
 	using HList<Monome>::last;

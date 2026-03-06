@@ -3,50 +3,82 @@
 #include <iostream>
 #include <random>
 
+using namespace std;
+
+#define STCtoD static_cast<double>
+
+enum class SkipErrors { ITER_EMPTY, ALREADY_EXISTS };
+
 template<class T>
 struct SkipLink {
-	std::vector<SkipLink*> nextLinks; 
-	T value; int level;
-	SkipLink(int l = 0, SkipLink* next_bot = nullptr) : value(T()), level(l) {
-		nextLinks[0] = next_bot; 
-		for (int i = 0; i < level; ++i) {
-			int j = i + 1;
-			this->nextLinks[j] = this->nextLinks[i];
-			if (this->nextLinks[j] != nullptr) {
-				this->nextLinks[j] = this->nextLinks[j]->nextLinks[i];
-			}
-		}
-	}
-	SkipLink(T v, int l = 0, SkipLink* next_bot = nullptr) : value(v), level(l) {
-		nextLinks[0] = next_bot;
-		for (int i = 0; i < level; ++i) {
-			int j = i + 1;
-			this->nextLinks[j] = this->nextLinks[i];
-			if (this->nextLinks[j] != nullptr) {
-				this->nextLinks[j] = this->nextLinks[j]->nextLinks[i];
-			}
-		}
-	}
+	vector<SkipLink<T>*> nexts;  
+	T val; int lvl;
+	SkipLink(int l, const T& v) : val(v), lvl(l + 1), nexts(l + 1, nullptr) {}
+    SkipLink(int l) : val(T()), lvl(l + 1), nexts(l + 1, nullptr) {}
 };
 
 template<class T>
-class SkipIterator {
-	SkipLink<T>* t;
+class Iterator {
+private:
+    SkipLink<T>* current;
 public:
-	SkipIterator(SkipLink<T>* _t) : t(_t) {}
-	bool hasNext() { return t != nullptr; }
-	T next() {
-		if (!hasNext()) throw - 1;
-		T curr = t->val; t = t->next;
-		return curr;
-	}
+    Iterator(SkipLink<T>* node) : current(node) {}
+    bool hasNext() { return current != nullptr; }
+    T next() {
+        if (!hasNext()) throw SkipErrors::ITER_EMPTY;
+        T val = current->value;
+        current = current->nextLinks[0];
+        return val;
+    }
 };
 
 template<class T>
 class SkipList {
-	SkipLink* head;
-	SkipLink* last;
-	void addAfter(SkipLink* link, T val) {
+protected:
+    SkipLink<T>* head;
+    int maxLevel;
+    int genLevel() {
+        int level = 0;
+        while (level < maxLevel && (STCtoD(rand()) / STCtoD(RAND_MAX))) {
+            ++level;
+        } return level;
+    }
+public:
+    SkipList(int maxLvl = 4, T headval) : maxLevel(maxLvl) {
+        srand(time(nullptr));
+        head = new SkipLink<T>(headval, maxLevel);
+    }
+    void insert(const T& v) {
+        vector<SkipLink<T>*> to_update(maxLevel + 1, nullptr);
+        SkipLink<T>* curr = head;
 
-	}
+        for (int i = maxLevel; i >= 0; i--) {
+            while (curr->nexts[i] && curr->nexts[i]->val < v) {
+                curr = curr->nexts[i];
+            }
+            to_update[i] = curr;
+        }
+        curr = curr->nexts[0];
+
+        if (curr && curr->val == v) {
+            throw SkipErrors::ALREADY_EXISTS;
+        }
+
+        int newLevel = genLevel();
+        auto newNode = new SkipLink<T>(v, newLevel);
+
+        for (int i = 0; i <= newLevel; i++) {
+            newNode->nexts[i] = to_update[i]->nexts[i];
+            to_update[i]->nexts[i] = newNode;
+        }
+    }
+    bool isEmpty() { return head->nexts[0] == nullptr; }
+    void delFirst() {
+        SkipLink<T>* to_del = head->nexts[0];
+        for (int i = to_del->lvl; i >= 0; i--) {
+            head->nexts[i] = to_del->nexts[i];
+        }
+        delete to_del;
+    }
+    void clear() { while (!isEmpty()) { delFirst(); } }
 };

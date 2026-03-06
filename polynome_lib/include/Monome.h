@@ -3,14 +3,11 @@
 #include <iostream>
 using namespace std;
 
-#define DEGR_MAX 10
-#define DEGR_MIN -5
-
 enum variables { Z, Y, X };
 // одна и та же память интерпретируется по-разному
 union degrees { 
 	unsigned N; 
-	char s[4]; 
+	char s[4];
 public:
 	degrees() : N(0) {}
 	degrees(int v) : N(v) {}
@@ -21,6 +18,9 @@ class Monome {
 	degrees degr;
 public:
 	Monome(double c = 1, degrees d = 0) : coeff(c), degr(d) {}
+
+	static const Monome MIN();
+	static const Monome MAX();
 
 	// class is triviable copyable, do we really need cope and move constructors?
 	// класс тривиально копируемый, реально надо конструктор копирования и присваивания?
@@ -41,9 +41,15 @@ public:
 
 	Monome operator-() const;
 
-	bool is_similar_to(const Monome& other) const;
+	bool fully_equals(const Monome& other) const;
 	bool operator==(const Monome& other) const;
 	bool operator!=(const Monome& other) const;
+
+	bool operator<(const Monome& other) const;
+	bool operator<=(const Monome& other) const;
+
+	bool operator>(const Monome& other) const;
+	bool operator>=(const Monome& other) const;
 
 	inline void set_coefficient(double c) { this->coeff = c; }
 	inline void set_degree(variables var, char d) { char* deg = (char*)&this->degr; deg[var] = d; }

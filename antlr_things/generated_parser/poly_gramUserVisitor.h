@@ -13,14 +13,18 @@ public:
     virtual std::any visitFinalMonome(poly_gramParser::FinalMonomeContext* ctx) override {
         Monome res = Monome();
         res.set_coefficient(std::any_cast<double>(visit(ctx->coeff())));
-
-        int xd = std::any_cast<int>(visit(ctx->x_var()));
-        int yd = std::any_cast<int>(visit(ctx->y_var()));
-        int zd = std::any_cast<int>(visit(ctx->z_var()));
-
-        res.set_degree(X, static_cast<char>(xd));
-        res.set_degree(Y, static_cast<char>(yd));
-        res.set_degree(Z, static_cast<char>(zd));
+        if (ctx->x_var()) {
+            int xd = std::any_cast<int>(visit(ctx->x_var()));
+            res.set_degree(X, static_cast<char>(xd));
+        }
+        if (ctx->y_var()) {
+            int yd = std::any_cast<int>(visit(ctx->y_var()));
+            res.set_degree(Y, static_cast<char>(yd));
+        }
+        if (ctx->z_var()) {
+            int zd = std::any_cast<int>(visit(ctx->z_var()));
+            res.set_degree(Z, static_cast<char>(zd));
+        }
         return res;
     }
     virtual std::any visitSumOfMonomesPolynome(poly_gramParser::SumOfMonomesPolynomeContext* ctx) override {

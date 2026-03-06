@@ -47,14 +47,13 @@ Polynome Polynome::operator+(const Polynome& other) const {
         if (move_f) { fcurr = first.next(); move_f = false; }
         if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
-        degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
-        if (fcurr.is_similar_to(scurr)) {
+        if (fcurr == scurr) {
             Monome to_add = fcurr + scurr;
-            if (monome_check(to_add)) { res.addLast(to_add); }
+            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
             move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
             else { if (monome_check(scurr)) { res.addLast(scurr); } move_s = true; }
         }
     }
@@ -84,13 +83,13 @@ Polynome Polynome::operator-(const Polynome& other) const {
         if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
         degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
-        if (fcurr.is_similar_to(scurr)) {
+        if (fcurr == scurr) {
             Monome to_add = fcurr - scurr;
-            if (monome_check(to_add)) { res.addLast(to_add); }
+            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
             move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
             else { if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; }
         }
     }
@@ -137,13 +136,13 @@ Polynome& Polynome::operator+=(const Polynome& other) {
         if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
         degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
-        if (fcurr.is_similar_to(scurr)) {
+        if (fcurr == scurr) {
             Monome to_add = fcurr + scurr;
-            if (monome_check(to_add)) { res.addLast(to_add); }
+            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
             move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
             else { if (monome_check(scurr)) { res.addLast(scurr); } move_s = true; }
         }
     }
@@ -174,13 +173,13 @@ Polynome& Polynome::operator-=(const Polynome& other) {
         if (move_s) { scurr = second.next(); move_s = false; }
         double fc = fcurr.get_coeff(), sc = scurr.get_coeff();
         degrees fd = fcurr.get_degr(), sd = scurr.get_degr();
-        if (fcurr.is_similar_to(scurr)) {
+        if (fcurr == scurr) {
             Monome to_add = fcurr - scurr;
-            if (monome_check(to_add)) { res.addLast(to_add); }
+            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
             move_f = true; move_s = true;
         }
         else {
-            if (fd.N > sd.N) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
+            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
             else { if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; }
         }
     }

@@ -1,17 +1,34 @@
 #include "Monome.h"
 #include <cmath>
 
+// ----------------< min & max values >------------------------------------------------------------
+
+const Monome Monome::MIN() {
+	Monome res;
+	res.coeff = numeric_limits<double>::min();
+	res.degr.N = numeric_limits<unsigned>::min();
+	return res;
+}
+const Monome Monome::MAX() {
+	Monome res;
+	res.coeff = numeric_limits<double>::max();
+	res.degr.N = numeric_limits<unsigned>::max();
+	return res;
+}
+
+// ------------------------------------------------------------------------------------------------
+
 // ----------------< regular operators >-----------------------------------------------------------
 
 Monome Monome::operator+(const Monome& other) const {
-	if (this->degr.N != other.degr.N) throw - 1;
+	if (*this != other) throw - 1;
 	double sum = this->coeff + other.coeff;
 	if (sum < 0 && this->coeff > 0 && other.coeff > 0) { sum = std::numeric_limits<double>::max(); }
 	if (sum > 0 && this->coeff < 0 && other.coeff < 0) { sum = std::numeric_limits<double>::min(); }
 	return Monome(sum, this->degr);
 }
 Monome Monome::operator-(const Monome& other) const {
-	if (this->degr.N != other.degr.N) throw - 1;
+	if (*this != other) throw - 1;
 	double dif = this->coeff - other.coeff;
 	if (dif < 0 && this->coeff > 0 && other.coeff < 0) { dif = std::numeric_limits<double>::max(); }
 	if (dif > 0 && this->coeff < 0 && other.coeff > 0) { dif = std::numeric_limits<double>::min(); }
@@ -79,7 +96,7 @@ Monome Monome::operator/(double c) const {
 // ----------------< smth= operators >-------------------------------------------------------------
 
 Monome& Monome::operator+=(const Monome& other) {
-	if (this->degr.N != other.degr.N) throw - 1;
+	if (*this != other) throw - 1;
 	double sum = this->coeff + other.coeff;
 	if (sum < 0 && this->coeff > 0 && other.coeff > 0) { sum = std::numeric_limits<double>::max(); }
 	if (sum > 0 && this->coeff < 0 && other.coeff < 0) { sum = std::numeric_limits<double>::min(); }
@@ -87,7 +104,7 @@ Monome& Monome::operator+=(const Monome& other) {
 	return *this;
 }
 Monome& Monome::operator-=(const Monome& other) {
-	if (this->degr.N != other.degr.N) throw - 1;
+	if (*this != other) throw - 1;
 	double dif = this->coeff - other.coeff;
 	if (dif < 0 && this->coeff > 0 && other.coeff < 0) { dif = std::numeric_limits<double>::max(); }
 	if (dif > 0 && this->coeff < 0 && other.coeff > 0) { dif = std::numeric_limits<double>::min(); }
@@ -165,16 +182,28 @@ Monome Monome::operator-() const {
 
 // ----------------< Comparators >-----------------------------------------------------------------
 
-bool Monome::is_similar_to(const Monome& other) const {
-	return this->degr.N == other.degr.N;
-}
-bool Monome::operator==(const Monome& other) const {
-	if (this->is_similar_to(other)) {
+bool Monome::fully_equals(const Monome& other) const {
+	if (*this == other) {
 		return this->coeff == other.coeff;
 	} return false;
 }
+bool Monome::operator==(const Monome& other) const {
+	return this->degr.N == other.degr.N;
+}
 bool Monome::operator!=(const Monome& other) const {
 	return !(this->operator==(other));
+}
+bool Monome::operator<(const Monome& other) const {
+	return this->degr.N < other.degr.N;
+}
+bool Monome::operator<=(const Monome& other) const {
+	return this->degr.N <= other.degr.N;
+}
+bool Monome::operator>(const Monome& other) const {
+	return this->degr.N > other.degr.N;
+}
+bool Monome::operator>=(const Monome& other) const {
+	return this->degr.N >= other.degr.N;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -234,11 +263,5 @@ istream& operator>>(istream& istr, Monome& to_in) {
 /// }
 /// 
 /// 
-/// тз:
-/// над полиномами: + - * вычислить значение
-/// диапозон степеней [-5; 10]
-/// если хотя бы одна переменная не в диапазоне степеней после каких-л. вычислений - отбрасываем, он не нужен
-/// попробовать NTLR или конечный автомат, чтобы полином мог вводиться как 1.5 * x^2 * y^3 + -2 * x^4 * z^-2
-/// юзаем юнион
 /// под звездочкой: можно попробовать списки с пропуском КОТОРЫЕ ХОДИМ НА ПОЛОВИНКУ, НА ЧЕТВЕРТИНКУ И ТД
 /// 

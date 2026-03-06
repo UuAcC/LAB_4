@@ -52,7 +52,7 @@ TEST_F(PolynomeTest, ConstructorFromMonome) {
 }
 
 TEST_F(PolynomeTest, ConstructorFromString) {
-    Polynome p("2.0 * x^2 * y^1 * z^0 + 1.0 * x^0 * y^1 * z^1");
+    Polynome p("2.0 * x^2 * y^1 * z^0 + 1.0 * y^1 * z^1");
     double expected = m1.value_in_point(2.0, 3.0, 4.0) +
         m3.value_in_point(2.0, 3.0, 4.0);
     EXPECT_EQ(p.calculate(2.0, 3.0, 4.0), expected);

@@ -30,7 +30,7 @@ class HList {
 protected:
 	HLink<T>* head;
 	HLink<T>* last;
-	HLink<T>* addAfter(HLink<T>* p, T val) {
+	HLink<T>* addAfter(HLink<T>* p, const T& val) {
 		HLink<T>* t = new HLink<T>(val, p->next);
 		p->next = t;
 		return t;
@@ -69,8 +69,8 @@ public:
 		last = other.last; other.last = nullptr;
 		return *this;
 	}
-	void addFirst(T val) { addAfter(head, val); }
-	void addLast(T val) { last = addAfter(last, val); }
+	void addFirst(const T& val) { addAfter(head, val); }
+	void addLast(const T& val) { last = addAfter(last, val); }
 	void insertAfter(int i, T val) {
 		HLink<T>* t = head; int j = 0;
 		while ((head != last) && (j < i)) {
