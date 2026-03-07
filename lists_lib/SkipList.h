@@ -7,30 +7,33 @@ using namespace std;
 
 #define STCtoD static_cast<double>
 
-enum class SkipErrors { ITER_EMPTY, ALREADY_EXISTS };
+enum class SkipErrors { EMPTY, ALREADY_EXISTS };
 
 template<class T>
 struct SkipLink {
 	vector<SkipLink<T>*> nexts;  
 	T val; int lvl;
-	SkipLink(int l, const T& v) : val(v), lvl(l + 1), nexts(l + 1, nullptr) {}
-    SkipLink(int l) : val(T()), lvl(l + 1), nexts(l + 1, nullptr) {}
+	SkipLink(int l, const T& v) : val(v), lvl(l), nexts(l + 1, nullptr) {}
+    SkipLink(int l) : val(T()), lvl(l), nexts(l + 1, nullptr) {}
 };
 
 template<class T>
 class Iterator {
 private:
-    SkipLink<T>* current;
+    SkipLink<T>* curr;
 public:
-    Iterator(SkipLink<T>* node) : current(node) {}
-    bool hasNext() { return current != nullptr; }
+    Iterator(SkipLink<T>* node) : curr(node) {}
+    bool hasNext() { return curr != nullptr; }
     T next() {
-        if (!hasNext()) throw SkipErrors::ITER_EMPTY;
-        T val = current->value;
-        current = current->nextLinks[0];
+        if (!hasNext()) throw SkipErrors::EMPTY;
+        T val = curr->val;
+        curr = curr->nexts[0];
         return val;
     }
 };
+
+template<class T>
+bool SkipList<T>::randomInitialized = false;
 
 template<class T>
 class SkipList {
@@ -39,21 +42,64 @@ protected:
     int maxLevel;
     int genLevel() {
         int level = 0;
-        while (level < maxLevel && (STCtoD(rand()) / STCtoD(RAND_MAX))) {
+        while (level < maxLevel && (STCtoD(rand()) / STCtoD(RAND_MAX)) > 0.5) {
             ++level;
         } return level;
     }
+    static bool randomInitialized;
 public:
-    SkipList(int maxLvl = 4, T headval) : maxLevel(maxLvl) {
+    static void initRandom() { 
         srand(time(nullptr));
+        randomInitialized = true;
+    }
+    SkipList(int maxLvl = 4, const T& headval) : maxLevel(maxLvl) {
+        if (!randomInitialized) initRandom();
         head = new SkipLink<T>(headval, maxLevel);
     }
-    void insert(const T& v) {
+    SkipList(const SkipList& other) { // вроде O(N*logN)
+        if (!randomInitialized) initRandom();
+        this->maxLevel = other.maxLevel;
+        this->head = new SkipLink<T>(maxLevel, other.head->val);
+        auto currToCpy = other.head->nexts[0];
+        while (currToCpy) {
+            this->insert(currToCpy->val);
+            currToCpy = currToCpy->nexts[0];
+        }
+    }
+    SkipList& operator=(const SkipList& other) {
+        if (this != &other) {
+            if (!randomInitialized) initRandom();
+            this->maxLevel = other.maxLevel;
+            this->head = new SkipLink<T>(maxLevel, other.head->val);
+            auto currToCpy = other.head->nexts[0];
+            while (currToCpy) {
+                this->insert(currToCpy->val);
+                currToCpy = currToCpy->nexts[0];
+            }
+        }
+        return *this;
+    }
+    SkipList(SkipList&& other) {
+        this->head = other.head;
+        other.head = nullptr;
+        this->maxLevel = other.maxLevel;
+        other.maxLevel = NULL;
+    }
+    SkipList& operator=(SkipList&& other) {
+        if (this != &other) {
+            this->head = other.head;
+            other.head = nullptr;
+            this->maxLevel = other.maxLevel;
+            other.maxLevel = NULL;
+        }
+        return *this;
+    }
+    void insert(const T& v) { // должно быть O(logN)
         vector<SkipLink<T>*> to_update(maxLevel + 1, nullptr);
         SkipLink<T>* curr = head;
 
         for (int i = maxLevel; i >= 0; i--) {
-            while (curr->nexts[i] && curr->nexts[i]->val < v) {
+            while (curr->nexts[i] && curr->nexts[i]->val > v) {
                 curr = curr->nexts[i];
             }
             to_update[i] = curr;
@@ -74,6 +120,7 @@ public:
     }
     bool isEmpty() { return head->nexts[0] == nullptr; }
     void delFirst() {
+        if (isEmpty()) throw SkipErrors::EMPTY;
         SkipLink<T>* to_del = head->nexts[0];
         for (int i = to_del->lvl; i >= 0; i--) {
             head->nexts[i] = to_del->nexts[i];
@@ -81,4 +128,5 @@ public:
         delete to_del;
     }
     void clear() { while (!isEmpty()) { delFirst(); } }
+    ~SkipList() { clear(); delete head; }
 };
