@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 #include <limits>
-#include "Monome.h"
 #include "Polynome.h"
-#include "HList.h"
 
 class PolynomeTest : public ::testing::Test {
 protected:
@@ -329,7 +327,8 @@ TEST_F(PolynomeTest, AssociativityOfAddition) {
     Polynome p2(m2);
     Polynome p3(m3);
 
-    Polynome left = (p1 + p2) + p3;
+    Polynome left = p1 + p2; 
+    left += p3;
     Polynome right = p1 + (p2 + p3);
 
     double x = 2.0, y = 3.0, z = 4.0;

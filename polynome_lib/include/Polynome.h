@@ -1,25 +1,26 @@
 #pragma once
 
-#include "HList.h"
+#include "SkipList.h"
 #include "Monome.h"
 #include <string>
 
 #define DEGR_MAX 10
 #define DEGR_MIN -5
 
-class Polynome : private HList<Monome> {
-	using HList<Monome>::head;
-	using HList<Monome>::last;
+bool SkipList<Monome>::SkipListRandomInitialized = false;
+
+class Polynome : private SkipList<Monome> {
+	using SkipList<Monome>::head;
 	bool monome_check(const Monome& m) const;
 public:
-	Polynome() : HList<Monome>() {}
+	Polynome() : SkipList<Monome>(Monome::MAX()) {}
 	Polynome(const Monome& mon);
 	Polynome(std::string str);
 
-	Polynome(const Polynome& other) : HList<Monome>(other) {}
+	Polynome(const Polynome& other) : SkipList<Monome>(other) {}
 	Polynome& operator=(const Polynome& other);
 
-	Polynome(Polynome&& other) noexcept : HList<Monome>(other) {}
+	Polynome(Polynome&& other) noexcept : SkipList<Monome>(std::move(other)) {}
 	Polynome& operator=(Polynome&& other) noexcept;
 
 	Polynome operator+(const Polynome& other) const;

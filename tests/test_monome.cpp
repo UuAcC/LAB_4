@@ -156,7 +156,7 @@ TEST(MonomeTest, EqualityOperator) {
     Monome m4(2.5, degrees(6));
 
     EXPECT_TRUE(m1 == m2);
-    EXPECT_FALSE(m1 == m3);
+    EXPECT_FALSE(m1.fully_equals(m3));
     EXPECT_FALSE(m1 == m4);
 }
 
@@ -166,7 +166,7 @@ TEST(MonomeTest, InequalityOperator) {
     Monome m3(3.0, degrees(5));
 
     EXPECT_FALSE(m1 != m2);
-    EXPECT_TRUE(m1 != m3);
+    EXPECT_FALSE(m1.fully_equals(m3));
 }
 
 TEST(MonomeTest, IsSimilarTo) {
@@ -174,8 +174,8 @@ TEST(MonomeTest, IsSimilarTo) {
     Monome m2(3.0, degrees(5));
     Monome m3(2.5, degrees(6));
 
-    EXPECT_TRUE(m1.is_similar_to(m2));
-    EXPECT_FALSE(m1.is_similar_to(m3));
+    EXPECT_TRUE(m1 == m2);
+    EXPECT_FALSE(m1 == m3);
 }
 
 TEST(MonomeTest, ValueInPoint) {
