@@ -41,119 +41,53 @@ Polynome Polynome::operator+(const Polynome& other) const {
     Iterator<Monome> first = this->itr();
     Iterator<Monome> second = other.itr();
     Monome fcurr, scurr;
-    bool move_f = true, move_s = true;
-    while (first.hasNext() && second.hasNext()) {
-        if (move_f) { fcurr = first.next(); move_f = false; }
-        if (move_s) { scurr = second.next(); move_s = false; }
+    bool hasFirst = first.hasNext(), hasSecond = second.hasNext();
+    if (hasFirst) fcurr = first.next();
+    if (hasSecond) scurr = second.next();
+    while (hasFirst && hasSecond) {
         if (fcurr == scurr) {
-            Monome to_add = fcurr + scurr;
-            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
-            move_f = true; move_s = true;
+            Monome sum = fcurr + scurr;
+            if (monome_check(sum) && sum.get_coeff() != 0.0)
+                res.addLast(sum);
+            hasFirst = first.hasNext();
+            hasSecond = second.hasNext();
+            if (hasFirst) fcurr = first.next();
+            if (hasSecond) scurr = second.next();
+        }
+        else if (fcurr > scurr) {
+            if (monome_check(fcurr)) {
+                res.addLast(fcurr);
+            }
+            hasFirst = first.hasNext();
+            if (hasFirst) fcurr = first.next();
         }
         else {
-            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
-            else { if (monome_check(scurr)) { res.addLast(scurr); } move_s = true; }
+            if (monome_check(scurr)) {
+                res.addLast(scurr);
+            }
+            hasSecond = second.hasNext();
+            if (hasSecond) scurr = second.next();
         }
     }
-    while (first.hasNext() && !move_s) {
-        if (move_f) { fcurr = first.next(); move_f = false; }
-        if (fcurr == scurr) {
-            Monome to_add = fcurr + scurr;
-            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
-            move_f = true; move_s = true;
+    while (hasFirst) {
+        if (monome_check(fcurr)) {
+            res.addLast(fcurr);
         }
-        else {
-            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
-            else { if (monome_check(scurr)) { res.addLast(scurr); } move_s = true; }
-        }
-    } 
-    while (first.hasNext()) {
-        fcurr = first.next();
-        if (monome_check(fcurr)) { res.addLast(fcurr); }
+        hasFirst = first.hasNext();
+        if (hasFirst) fcurr = first.next();
     }
-    if (!move_s) {
-        if (monome_check(scurr)) { res.addLast(scurr); } move_s = true;
-    }
-    while (second.hasNext() && !move_f) {
-        if (move_s) { scurr = second.next(); move_s = false; }
-        if (fcurr == scurr) {
-            Monome to_add = fcurr + scurr;
-            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
-            move_f = true; move_s = true;
+    while (hasSecond) {
+        if (monome_check(scurr)) {
+            res.addLast(scurr);
         }
-        else {
-            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
-            else { if (monome_check(scurr)) { res.addLast(scurr); } move_s = true; }
-        }
-    } 
-    while (second.hasNext()) {
-        scurr = second.next();
-        if (monome_check(scurr)) { res.addLast(scurr); }
-    }
-    if (!move_f) {
-        if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true;
+        hasSecond = second.hasNext();
+        if (hasSecond) scurr = second.next();
     }
     return res;
 }
 
 Polynome Polynome::operator-(const Polynome& other) const {
-    Polynome res;
-    Iterator<Monome> first = this->itr();
-    Iterator<Monome> second = other.itr();
-    Monome fcurr, scurr;
-    bool move_f = true, move_s = true;
-    while (first.hasNext() && second.hasNext()) {
-        if (move_f) { fcurr = first.next(); move_f = false; }
-        if (move_s) { scurr = second.next(); move_s = false; }
-        if (fcurr == scurr) {
-            Monome to_add = fcurr - scurr;
-            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
-            move_f = true; move_s = true;
-        }
-        else {
-            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
-            else { if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; }
-        }
-    }
-    while (first.hasNext() && !move_s) {
-        if (move_f) { fcurr = first.next(); move_f = false; }
-        if (fcurr == scurr) {
-            Monome to_add = fcurr - scurr;
-            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
-            move_f = true; move_s = true;
-        }
-        else {
-            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
-            else { if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; }
-        }
-    } 
-    while (first.hasNext()) {
-        fcurr = first.next();
-        if (monome_check(fcurr)) { res.addLast(fcurr); }
-    } 
-    if (!move_s) { 
-        if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; 
-    }
-    while (second.hasNext() && !move_f) {
-        if (move_s) { scurr = second.next(); move_s = false; }
-        if (fcurr == scurr) {
-            Monome to_add = fcurr - scurr;
-            if (monome_check(to_add) && to_add.get_coeff() != 0.0) { res.addLast(to_add); }
-            move_f = true; move_s = true;
-        }
-        else {
-            if (fcurr > scurr) { if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true; }
-            else { if (monome_check(scurr)) { res.addLast(-scurr); } move_s = true; }
-        }
-    } 
-    while (second.hasNext()) {
-        scurr = second.next();
-        if (monome_check(scurr)) { res.addLast(-scurr); }
-    }
-    if (!move_f) {
-        if (monome_check(fcurr)) { res.addLast(fcurr); } move_f = true;
-    }
-    return res;
+    return *this + (other * -1.0);
 }
 
 Polynome Polynome::operator*(const Polynome& other) const {
@@ -188,19 +122,19 @@ Polynome& Polynome::operator*=(const Polynome& other) {
     return *this;
 }
 
-Polynome Polynome::operator+(const Monome& mon) {
+Polynome Polynome::operator+(const Monome& mon) const {
     Polynome res;
     res.addLast(mon);
     res += *this;
     return res;
 }
-Polynome Polynome::operator-(const Monome& mon) {
+Polynome Polynome::operator-(const Monome& mon) const {
     Polynome res;
     res.addLast(-mon);
     res += *this;
     return res;
 }
-Polynome Polynome::operator*(const Monome& mon) {
+Polynome Polynome::operator*(const Monome& mon) const {
     Polynome res;
     Iterator<Monome> iter = this->itr();
     while (iter.hasNext()) {
@@ -210,7 +144,7 @@ Polynome Polynome::operator*(const Monome& mon) {
     }
     return res;
 }
-Polynome Polynome::operator/(const Monome& mon) {
+Polynome Polynome::operator/(const Monome& mon) const {
     Polynome res;
     Iterator<Monome> iter = this->itr();
     while (iter.hasNext()) {
@@ -251,6 +185,42 @@ Polynome& Polynome::operator/=(const Monome& mon) {
         Monome curr = iter.next() / mon;
         if (monome_check(curr))
             res.addLast(curr);
+    }
+    this->operator=(res);
+    return *this;
+}
+
+Polynome Polynome::operator*(double val) const {
+    Polynome res;
+    Iterator<Monome> iter = this->itr();
+    while (iter.hasNext()) {
+        res.addLast(iter.next() * val);
+    }
+    return res;
+}
+Polynome Polynome::operator/(double val) const {
+    Polynome res;
+    Iterator<Monome> iter = this->itr();
+    while (iter.hasNext()) {
+        res.addLast(iter.next() / val);
+    }
+    return res;
+}
+
+Polynome& Polynome::operator*=(double val) {
+    Polynome res;
+    Iterator<Monome> iter = this->itr();
+    while (iter.hasNext()) {
+        res.addLast(iter.next() / val);
+    }
+    this->operator=(res);
+    return *this;
+}
+Polynome& Polynome::operator/=(double val) {
+    Polynome res;
+    Iterator<Monome> iter = this->itr();
+    while (iter.hasNext()) {
+        res.addLast(iter.next() / val);
     }
     this->operator=(res);
     return *this;

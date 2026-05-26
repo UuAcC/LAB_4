@@ -64,32 +64,40 @@ public:
         head = new SkipLink<T>(maxLevel, headval);
         lasts = vector<SkipLink<T>*>(maxLevel + 1, head);
     }
-    SkipList(const SkipList& other) { // вроде O(N*logN)
+    SkipList(const SkipList& other) { // вроде О(N)
         if (!SkipListRandomInitialized) initRandom();
-        this->maxLevel = other.maxLevel;
-        this->head = new SkipLink<T>(maxLevel, other.head->val);
-        this->lasts = vector<SkipLink<T>*>(maxLevel + 1, head);
-        auto currToCpy = other.head->nexts[0];
+        maxLevel = other.maxLevel;
+        head = new SkipLink<T>(maxLevel, other.head->val);
+        lasts = vector<SkipLink<T>*>(maxLevel + 1, head);
+        SkipLink<T>* currToCpy = other.head->nexts[0];
         while (currToCpy) {
-            this->insert(currToCpy->val);
-            currToCpy = currToCpy->nexts[0]; // без перекрутки реализовать.
+            int newLevel = currToCpy->lvl;
+            auto newNode = new SkipLink<T>(newLevel, currToCpy->val);
+            for (int i = 0; i <= newLevel; ++i) {
+                lasts[i]->nexts[i] = newNode;
+                lasts[i] = newNode;
+            }
+            currToCpy = currToCpy->nexts[0];
         }
-        this->updateLasts();
     }
     SkipList& operator=(const SkipList& other) {
         if (this != &other) {
             this->clear(); 
             delete this->head;
             if (!SkipListRandomInitialized) initRandom();
-            this->maxLevel = other.maxLevel;
-            this->head = new SkipLink<T>(maxLevel, other.head->val);
-            this->lasts = vector<SkipLink<T>*>(maxLevel + 1, head);
-            auto currToCpy = other.head->nexts[0];
+            maxLevel = other.maxLevel;
+            head = new SkipLink<T>(maxLevel, other.head->val);
+            lasts = vector<SkipLink<T>*>(maxLevel + 1, head);
+            SkipLink<T>* currToCpy = other.head->nexts[0];
             while (currToCpy) {
-                this->insert(currToCpy->val);
+                int newLevel = currToCpy->lvl;
+                auto newNode = new SkipLink<T>(newLevel, currToCpy->val);
+                for (int i = 0; i <= newLevel; ++i) {
+                    lasts[i]->nexts[i] = newNode;
+                    lasts[i] = newNode;
+                }
                 currToCpy = currToCpy->nexts[0];
             }
-            this->updateLasts();
         }
         return *this;
     }

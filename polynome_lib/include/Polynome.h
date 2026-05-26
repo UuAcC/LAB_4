@@ -31,15 +31,21 @@ public:
 	Polynome& operator-=(const Polynome& other);
 	Polynome& operator*=(const Polynome& other);
 
-	Polynome operator+(const Monome& mon);
-	Polynome operator-(const Monome& mon);
-	Polynome operator*(const Monome& mon);
-	Polynome operator/(const Monome& mon);
+	Polynome operator+(const Monome& mon) const;
+	Polynome operator-(const Monome& mon) const;
+	Polynome operator*(const Monome& mon) const;
+	Polynome operator/(const Monome& mon) const;
 
 	Polynome& operator+=(const Monome& mon);
 	Polynome& operator-=(const Monome& mon);
 	Polynome& operator*=(const Monome& mon);
 	Polynome& operator/=(const Monome& mon);
+
+	Polynome operator*(double val) const;
+	Polynome operator/(double val) const;
+
+	Polynome& operator*=(double val);
+	Polynome& operator/=(double val);
 
 	double calculate(double x, double y, double z) const;
 
